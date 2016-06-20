@@ -1,0 +1,15 @@
+
+--next
+-cp samples
+-cp src
+-lib perf.js
+-dce full
+-D stats
+-D source-map-content
+-debug
+
+--each
+
+--next
+-main Main
+-js main.js
