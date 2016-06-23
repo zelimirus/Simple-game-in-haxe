@@ -6,7 +6,9 @@ import pixi.core.text.Text;
 import pixi.plugins.app.Application;
 import pixi.extras.TilingSprite;
 import pixi.core.graphics.Graphics;
+import pixi.core.display.DisplayObject;
 import js.Browser;
+import pixi.interaction.EventTarget;
 
 class Main extends Application {
 
@@ -15,6 +17,7 @@ class Main extends Application {
     var gameStateINIT           = 1;
     var gameStateMOVING         = 2;
     var gameStateCHECK_WIN      = 3;
+    var gameStatusStop          = 4;
     var slotNumber              = 5;
     var initalX                 = 395;
     var tileHEIGHT              = 100;
@@ -54,6 +57,11 @@ class Main extends Application {
     var startDolarCount         = 0;
     var count                   = 0;
     var i = 0;
+    var inc = [25, 35, 50, 70, 100];
+    var imgSlot             = "assets/images/slot3.png";
+    var imgSlot3            = "assets/images/slot3.png";    
+    var imgSlot2            = "assets/images/slot3.png";
+
 
 	public function new() {
 		super();
@@ -63,9 +71,6 @@ class Main extends Application {
 	function _init() {
 		backgroundColor = 0xffffff;
 		super.start();
-		var imgSlot  			= "assets/images/slot3.png";
-		var imgSlot3 			= "assets/images/slot3.png";	
-		var imgSlot2 			= "assets/images/slot3.png";
 	    var texture1            = Texture.fromImage("assets/images/ram2.png");
 	    var texture2            = Texture.fromImage("assets/images/start.png");
 	    var texture4            = Texture.fromImage("assets/images/start-down.png");
@@ -73,7 +78,7 @@ class Main extends Application {
 	    var textureVucic        = Texture.fromImage("assets/images/vucic.jpg");
 	    var textureDacic        = Texture.fromImage("assets/images/dacic.jpg");
 	    var textureToma         = Texture.fromImage("assets/images/toma.jpg");
-	    var textureTadic        = Texture.fromImage("assets/images/tacic.jpg");
+	    var textureTadic        = Texture.fromImage("assets/images/tadic.jpg");
 	    var textureCeda         = Texture.fromImage("assets/images/ceda.jpg");
 	    var textureCanak        = Texture.fromImage("assets/images/canak.jpg");
 	    var textureSeselj       = Texture.fromImage("assets/images/seselj.jpg");
@@ -262,21 +267,6 @@ class Main extends Application {
     select.y    = 500;
     stage.addChild(select);
 
-    var imgButton           = new Sprite(texture2);
-    imgButton.x             = 606;
-    imgButton.y             = 450;
-    imgButton.height        = 40;
-    imgButton.width         = 100;
-    imgButton.interactive   = true;
-   
-
-    // imgButton
-    //     .on('mousedown', onButtonDown)
-    //     .on('touchstart', onButtonDown)
-    //     .on('mouseup', onButtonUp)
-    //     .on('touchend', onButtonUp)
-    //     .on('mouseover', onButtonOver)
-    //     .on('mouseout', onButtonUp);
 
     var imgBody     = new Sprite(texture1);
     imgBody.x       = 353;
@@ -316,6 +306,26 @@ class Main extends Application {
 	        stage.addChild(slotSprite3[i]);
 	        i++;
 	    }
+
+
+            var imgButton           = new Sprite(texture2);
+    imgButton.x             = 606;
+    imgButton.y             = 450;
+    imgButton.height        = 40;
+    imgButton.width         = 100;
+    imgButton.interactive   = true;
+   
+
+    imgButton
+         .on('mousedown', startAnimation);
+    imgButton
+         .on('mousedown', restart);
+        // .on('touchstart', onButtonDown)
+    //     .on('mouseup', onButtonUp)
+    //     .on('touchend', onButtonUp)
+    //     .on('mouseover', onButtonOver)
+    //     .on('mouseout', onButtonUp);
+
 
 	stage.addChild(imgBody);
     stage.addChild(imgButton);
@@ -453,9 +463,500 @@ class Main extends Application {
 
     stage.addChild(winnerCheck2);
 
-     var INC = [25, 35, 50, 70, 100];
-
+     
 	}
+
+  
+	
+    function max(stake,creditValue) {
+        stake.text = creditValue;
+    }
+
+     function mHover(obj) {
+        obj.scale.x    = 1.1;
+        obj.scale.y    = 1.1;
+        obj.position.x = obj.position.x - 1;
+        obj.position.y = obj.position.y - 1;
+    }
+
+    function mHoverOut(obj) {
+        obj.scale.x    = 1.0;
+        obj.scale.y    = 1.0;
+        obj.position.x = obj.position.x + 1;
+        obj.position.y = obj.position.y + 1;
+    }
+
+    function min(stake) {
+        stake.text = 100;
+    }
+
+    function arrowRightClick(stake, creditValue) {
+        if (stake.text < creditValue) {
+            stake.text = stake.text + 100;
+            renderer.render(stage);
+        }
+    }
+    function arrowLeftClick(stake) {
+        if (stake.text > 100) {
+            stake.text = stake.text - 100;
+            renderer.render(stage);
+        }
+    }
+
+    function arrowDown(obj) {
+        obj.isdown = true;
+        obj.tint   = 0xFF0000;
+    }
+
+    function arrowUp(obj) {
+        obj.isdown = false;
+        obj.tint   = 0xA4CC00;
+    }
+
+    function arrowOver(obj) {
+        obj.tint = 0x5D8700;
+    }
+
+    function restart() {
+        gameStatus = gameStateINIT;
+    }
+
+    function startAnimation() {
+       
+       
+         if (gameStatus == gameStateINIT || gameStatus == gameStateCHECK_WIN) {
+            preChoosedPosition1 = [0, 2, 4, 6, 1];
+            preChoosedPosition2 = [0, 2, 4, 6, 1];
+            preChoosedPosition3 = [0, 2, 4, 6, 1];
+            var i = 0;
+            while ( i < slotNumber) {
+                preChoosedPosition1[i] = getRandomInt(0, 6);
+                preChoosedPosition2[i] = getRandomInt(0, 6);
+                preChoosedPosition3[i] = getRandomInt(0, 6);
+
+                slotSprite1[i].tilePosition.y   = (-preChoosedPosition1[i] * tileHEIGHT);
+                slotSprite1[i].tint             = 16777215;
+                finalTileY1[i]                  = (nCycly * tileHEIGHT * tTiles);
+                slotSprite2[i].tilePosition.y   = (-preChoosedPosition2[i] * tileHEIGHT);
+                slotSprite2[i].tint             = 16777215;
+                finalTileY2[i]                  = (nCycly * tileHEIGHT * tTiles);
+                slotSprite3[i].tilePosition.y   = (-preChoosedPosition3[i] * tileHEIGHT);
+                slotSprite3[i].tint             = 16777215;
+                finalTileY3[i]                  = (nCycly * tileHEIGHT * tTiles);
+                i++;
+            }
+            gameStatus = gameStateMOVING;
+
+        //      if (preChoosedPosition3[i] != preChoosedPosition3[i - 1]) {
+        //         var union = preChoosedPosition1.concat(preChoosedPosition2);
+        //         var store = union.concat(preChoosedPosition3);
+        //         x = 0;
+        //         while (x < 15) {
+        //             switch (store[x]) {
+        //                 case 0:
+        //                     can0++;
+        //                     break;
+        //                 case 1:
+        //                     can1++;
+        //                     break;
+        //                 case 2:
+        //                     can2++;
+        //                     break;
+        //                 case 3:
+        //                     can3++;
+        //                     break;
+        //                 case 4:
+        //                     can4++;
+        //                     break;
+        //                 case 5:
+        //                     can5++;
+        //                     break;
+        //                 case 6:
+        //                     can6++;
+        //                     break;
+        //             }
+        //             x++;
+        //         }
+        //         result  = [can0, can1, can2, can3, can4, can5, can6];
+        //         result2 = [can0, can1, can2, can3, can4, can5, can6];
+        //     }
+           
+
+        //     setTimeout(
+        //         function() {
+
+        //             if (sortThisBaby(result2)) {
+        //                 switch (indexOfMax(result)) {
+        //                     case 0:
+        //                         winnerCandidateImg.texture = textureVucicFrame;
+        //                         interactive(true);
+        //                         if (finalCandidate == 0) {
+
+        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin();
+
+        //                         } else {
+        //                             hightlight(0);
+        //                             textUpadete(config.vucicMessage, 443, 45);
+        //                             playSound('assets/sounds/vucic/tisina.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+
+        //                         }
+        //                         break;
+        //                     case 1:
+        //                         winnerCandidateImg.texture = textureDacicFrame;
+        //                         interactive(true);
+
+        //                         if (finalCandidate == 1) {
+        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin();
+
+        //                         } else {
+        //                             hightlight(1);
+        //                             textUpadete(config.dacicMessage, 483, 45);
+        //                             playSound('assets/sounds/dacic/miljacka2.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+        //                         }
+        //                         break;
+        //                     case 2:
+        //                         winnerCandidateImg.texture = textureTomaFrame;
+        //                         interactive(true);
+
+        //                         if (finalCandidate == 2) {
+        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin();
+        //                         } else {
+        //                             hightlight(2);
+        //                             textUpadete(config.tomaMessage, 432, 45);
+        //                             playSound('assets/sounds/toma/engleski.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+        //                         }
+        //                         break;
+        //                     case 3:
+        //                         winnerCandidateImg.texture = textureTadicFrame;
+        //                         interactive(true);
+
+        //                         if (finalCandidate == 3) {
+        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin();
+        //                         } else {
+        //                             hightlight(3);
+        //                             textUpadete(config.tadicMessage, 470, 45);
+        //                             playSound('assets/sounds/tadic/mac.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+        //                         }
+        //                         break;
+        //                     case 4:
+        //                         winnerCandidateImg.texture = textureCedaFrame;
+        //                         interactive(true);
+
+        //                         if (finalCandidate == 4) {
+        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin();
+        //                         } else {
+        //                             hightlight(4);
+        //                             textUpadete(config.cedaMessage, 469, 45);
+        //                             playSound('assets/sounds/ceda/gospodjo2.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+        //                         }
+
+        //                         break;
+        //                     case 5:
+        //                         winnerCandidateImg.texture = textureCanakFrame;
+        //                         interactive(true);
+
+        //                         if (finalCandidate == 5) {
+        //                             textUpadete(config.winnerMessage, 635, 45, config.winnerColor);
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin();
+        //                         } else {
+        //                             hightlight(5);
+        //                             textUpadete(config.canakMessage, 363, 45);
+        //                             playSound('assets/sounds/canak/sat.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+        //                         }
+        //                         break;
+        //                     case 6:
+        //                         winnerCandidateImg.texture = textureSeseljFrame;
+        //                         interactive(true);
+
+        //                         if (finalCandidate == 6) {
+        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+        //                             canvasWinerLine();
+        //                             playSound('assets/sounds/win.mp3');
+        //                             canvasWinerLine();
+        //                             calcWin();
+        //                             onWinAmin()
+        //                         } else {
+        //                             hightlight(6);
+        //                             textUpadete(config.seseljMessage, 388, 45);
+        //                             playSound('assets/sounds/seselj/olja.mp3');
+        //                             canvasLine();
+        //                             calcDefeat();
+        //                         }
+        //                         break;
+        //                 }
+        //             } else {
+        //                 startAnimation()
+        //                 textUpadete(config.equalMessage, 500, 45);
+        //                 interactive(false);
+        //             }
+        //         }, 2800);
+        // }
+
+    }
+
+
+        if (gameStatus == gameStateZERO) {
+            gameStatus = gameStateINIT;
+
+        } else if (gameStatus == gameStateINIT) {
+                    gameStatus = gameStateCHECK_WIN;
+        } else if (gameStatus == gameStateMOVING) {
+            var i = 0;
+            while(i < slotNumber) { 
+                if (finalTileY1[i] > 0) {
+                    slotSprite1[i].tilePosition.y   = slotSprite1[i].tilePosition.y + inc[i];
+                    finalTileY1[i]                  = finalTileY1[i] - inc[i];
+                }
+                if (finalTileY2[i] > 0) {
+                    slotSprite2[i].tilePosition.y   = slotSprite2[i].tilePosition.y + inc[i];
+                    finalTileY2[i]                  = finalTileY2[i] - inc[i];
+                }
+                if (finalTileY3[i] > 0) {
+                    slotSprite3[i].tilePosition.y   = slotSprite3[i].tilePosition.y + inc[i];
+                    finalTileY3[i]                  = finalTileY3[i] - inc[i];
+                }
+                 i++;
+            }
+            if (finalTileY1[0] - 5 <= 0) {
+                gameStatus = gameStatusStop ;
+            }
+            if (finalTileY2[0] - 5 <= 0) {
+                gameStatus = gameStatusStop ;
+            }
+            if (finalTileY3[0] - 5 <= 0) {
+                gameStatus = gameStatusStop ;
+            }
+        } else if (gameStatus == gameStateCHECK_WIN) {
+
+            return;
+        }
+        
+        Browser.window.requestAnimationFrame(cast startAnimation);
+
+    }
+
+     function onButtonUp(obj, texture2) {
+        obj.isdown     = false;
+        obj.texture    = texture2;
+    }
+
+    function onButtonOver(obj,texture5) {
+        obj.texture = texture5;
+    }
+
+    function volumeClick(volume, volumeOnOF,volValue) {
+        if (volume) {
+            volumeOnOF.text = 'Uključi zvuk';
+            volume          = volValue;
+        } else {
+            volumeOnOF.text = 'Isključi zvuk';
+            volume          = volValue;
+        }
+    }
+
+    function onDown(obj,textureSeselj) {
+        obj.isdown     = true;
+        obj.texture    = textureSeselj;
+    }
+
+    function onUp(obj,textureSeseljFrame) {
+        obj.isdown     = false;
+        obj.texture    = textureSeseljFrame;
+    }
+
+    function add(yourCandidateImg,yourCandidate,line1,line2,winnerCheck,winnerCheck2,textureSeseljFrame,candNum) {
+        yourCandidateImg.texture    = textureSeseljFrame;
+        yourCandidate               = candNum;
+        stage.removeChild(line1);
+        stage.removeChild(line2);
+        stage.removeChild(winnerCheck);
+        stage.removeChild(winnerCheck2);
+    }
+
+     function hightlight(value,preChoosedPosition1,preChoosedPosition2,preChoosedPosition3,slotSprite1,slotSprite2,slotSprite3) {
+        var x = 0;
+        while (x < 6) {
+            if (preChoosedPosition1[x] == value) {
+                slotSprite1[x].tint = 99964444;
+            }
+
+            if (preChoosedPosition2[x] == value) {
+                slotSprite2[x].tint = 99964444;
+            }
+
+            if (preChoosedPosition3[x] == value) {
+                slotSprite3[x].tint = 99964444;
+            }
+         x++;
+        }
+    }
+
+    function interactive(obj,x) {
+
+        obj.interactive     = x;
+    }
+
+     function calcWin(invested,creditValue,stake,invested,showWinn,creditValueShow) {
+
+        if (invested > creditValue) {
+            stake.text  = creditValue;
+            invested    = creditValue;
+        }
+        creditValue             = creditValue + invested * 5;
+        creditValueShow.text    = creditValue;
+        // showWinn.text           = "+" + invested * 5;
+        // showWinn.style.fill     = '#A4CC00';
+        // stage.addChild(showWinn);
+        renderer.render(stage);
+    }
+
+      function calcDefeat(creditValue,creditValueShow,invested,stake) {
+
+        creditValue             = creditValue - invested;
+        creditValueShow.text    = creditValue;
+
+        if (invested > creditValue) {
+            stake.text = creditValue;
+        }
+
+        if (creditValue == 0 || creditValue < 0) {
+             if (Browser.window.confirm('Potrošio si sve pare i nisi više zanimljiv političarima, nova igra ?')) {
+
+                Browser.window.location.href = "index.html";
+
+            } else {
+                Browser.window.location.href = "assets/zeljko.stojakovic.cv.pdf";
+            }
+
+        }
+        // showWinn.text       = "-" + invested;
+        // showWinn.style.fill = '#ff0000';
+        // stage.addChild(showWinn);
+        renderer.render(stage);
+    }
+
+     function canvasLine(line1,line2) {
+        // line1.lineStyle(20, 0xff0000);
+        // line1.moveTo(50, 150);
+        // line1.lineTo(300, 400);
+        // stage.addChild(line1);
+        // line2.lineStyle(20, 0xff0000);
+        // line2.moveTo(300, 150);
+        // line2.lineTo(50, 400);
+        // stage.addChild(line2);
+        // renderer.render(stage);
+
+    }
+
+    function canvasWinerLine(winnerCheck,winnerCheck2,tvAntena1,tvAntena2,tvAntenaEnd1,tvAntenaEnd2,tv,congr,imgBody) {
+        // winnerCheck.lineStyle(17, 0xA4CC00, 1);
+        // winnerCheck.moveTo(250, 180);
+        // winnerCheck.lineTo(170, 350);
+        // winnerCheck.lineTo(110, 290);
+        // stage.addChild(winnerCheck);
+        // winnerCheck2.lineStyle(17, 0xA4CC00, 1);
+        // winnerCheck2.moveTo(1200, 180);
+        // winnerCheck2.lineTo(1120, 350);
+        // winnerCheck2.lineTo(1070, 290);
+        // stage.addChild(winnerCheck2);
+        // stage.addChild(tvAntena1);
+        // stage.addChild(tvAntena2);
+        // stage.addChild(tvAntenaEnd1);
+        // stage.addChild(tvAntenaEnd2);
+        // stage.addChild(tv);
+        // stage.addChild(congr);
+        // stage.removeChild(imgBody);
+        // renderer.render(stage);
+    }
+
+     function playSound(x,volume) {
+
+        // var audio       = new Audio(x);
+        // audio.volume    = volume;
+        // audio.play();
+
+    }
+
+    function textUpadete(value, x, y, color = " #ff0000",message) {
+        message.text        = value;
+        message.x           = x;
+        message.y           = y;
+        message.style.fill  = color;
+    }
+
+    function creditUpadete(value,creditValue) {
+        creditValue.text = value;
+    }
+
+    function getRandomInt(min, max) {
+        return untyped Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+     function getRandomPositions() {
+        var x = untyped getRandomInt(0, 100);
+        if (x > 50) {
+            x = untyped getRandomInt(0, 6);
+            return [x, x, x, x, x];
+        }
+        return [getRandomInt(0, 6), getRandomInt(0, 6), getRandomInt(0, 6)];
+    }
+
+    function sortThisBaby(arr:Array<Dynamic>) {
+        // arr = untyped arr.sort(function(a, b) {
+        //     return b - a;
+        // });
+        // if (arr[0] != arr[1]) return true;
+    }
+
+    function indexOfMax(arr) {
+        // if (arr.length === 0) return -1;
+
+        // var max = arr[0];
+        // var maxIndex = 0;
+
+        // for (var i = 1; i < arr.length; i++) {
+        //     if (arr[i] > max) {
+        //         maxIndex = i;
+        //         max = arr[i];
+        //     }
+        // }
+        // return maxIndex;
+    }
 
 	static function main() {
 		new Main();

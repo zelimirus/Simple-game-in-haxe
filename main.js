@@ -86,6 +86,8 @@ pixi_plugins_app_Application.prototype = {
 	}
 };
 var Main = function() {
+	this.imgSlot = "assets/images/slot3.png";
+	this.inc = [25,35,50,70,100];
 	this.i = 0;
 	this.preChoosedPosition3 = [6,1,2,4,0];
 	this.preChoosedPosition2 = [2,0,6,3,4];
@@ -93,15 +95,26 @@ var Main = function() {
 	this.slotSprite3 = [];
 	this.slotSprite2 = [];
 	this.slotSprite1 = [];
+	this.finalTileY3 = [];
+	this.finalTileY2 = [];
+	this.finalTileY1 = [];
+	this.gameStatus = 0;
 	this.creditValue = "5000";
 	this.selectCandidateWidth = 70;
 	this.selectCandidateHight = 70;
 	this.selectCandidateInitalX = 380;
 	this.selectCandidateInitalY = 535;
+	this.tTiles = 7;
+	this.nCycly = 5;
 	this.tileWIDTH = 100;
 	this.tileHEIGHT = 100;
 	this.initalX = 395;
 	this.slotNumber = 5;
+	this.gameStatusStop = 4;
+	this.gameStateCHECK_WIN = 3;
+	this.gameStateMOVING = 2;
+	this.gameStateINIT = 1;
+	this.gameStateZERO = 0;
 	pixi_plugins_app_Application.call(this);
 	this._init();
 };
@@ -113,9 +126,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 	_init: function() {
 		this.backgroundColor = 16777215;
 		pixi_plugins_app_Application.prototype.start.call(this);
-		var imgSlot = "assets/images/slot3.png";
-		var imgSlot3 = "assets/images/slot3.png";
-		var imgSlot2 = "assets/images/slot3.png";
 		var texture1 = PIXI.Texture.fromImage("assets/images/ram2.png");
 		var texture2 = PIXI.Texture.fromImage("assets/images/start.png");
 		var texture4 = PIXI.Texture.fromImage("assets/images/start-down.png");
@@ -123,7 +133,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		var textureVucic = PIXI.Texture.fromImage("assets/images/vucic.jpg");
 		var textureDacic = PIXI.Texture.fromImage("assets/images/dacic.jpg");
 		var textureToma = PIXI.Texture.fromImage("assets/images/toma.jpg");
-		var textureTadic = PIXI.Texture.fromImage("assets/images/tacic.jpg");
+		var textureTadic = PIXI.Texture.fromImage("assets/images/tadic.jpg");
 		var textureCeda = PIXI.Texture.fromImage("assets/images/ceda.jpg");
 		var textureCanak = PIXI.Texture.fromImage("assets/images/canak.jpg");
 		var textureSeselj = PIXI.Texture.fromImage("assets/images/seselj.jpg");
@@ -134,7 +144,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		var textureCedaFrame = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
 		var textureCanakFrame = PIXI.Texture.fromImage("assets/images/canak-ram.png");
 		var textureSeseljFrame = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
-		var texture3 = PIXI.Texture.fromImage(imgSlot);
+		var texture3 = PIXI.Texture.fromImage(this.imgSlot);
 		var selectVucic = new PIXI.Sprite(textureVucicFrame);
 		selectVucic.height = this.selectCandidateHight;
 		selectVucic.width = this.selectCandidateWidth;
@@ -228,12 +238,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		select.x = 509;
 		select.y = 500;
 		this.stage.addChild(select);
-		var imgButton = new PIXI.Sprite(texture2);
-		imgButton.x = 606;
-		imgButton.y = 450;
-		imgButton.height = 40;
-		imgButton.width = 100;
-		imgButton.interactive = true;
 		var imgBody = new PIXI.Sprite(texture1);
 		imgBody.x = 353;
 		imgBody.y = 70;
@@ -268,6 +272,14 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 			this.stage.addChild(this.slotSprite3[this.i]);
 			this.i++;
 		}
+		var imgButton = new PIXI.Sprite(texture2);
+		imgButton.x = 606;
+		imgButton.y = 450;
+		imgButton.height = 40;
+		imgButton.width = 100;
+		imgButton.interactive = true;
+		imgButton.on("mousedown",$bind(this,this.startAnimation));
+		imgButton.on("mousedown",$bind(this,this.restart));
 		this.stage.addChild(imgBody);
 		this.stage.addChild(imgButton);
 		var line1 = new PIXI.Graphics();
@@ -349,11 +361,58 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		showWinn.x = 740;
 		showWinn.y = 13;
 		this.stage.addChild(winnerCheck2);
-		var INC_0 = 25;
-		var INC_1 = 35;
-		var INC_2 = 50;
-		var INC_3 = 70;
-		var INC_4 = 100;
+	}
+	,restart: function() {
+		this.gameStatus = this.gameStateINIT;
+	}
+	,startAnimation: function() {
+		if(this.gameStatus == this.gameStateINIT || this.gameStatus == this.gameStateCHECK_WIN) {
+			this.preChoosedPosition1 = [0,2,4,6,1];
+			this.preChoosedPosition2 = [0,2,4,6,1];
+			this.preChoosedPosition3 = [0,2,4,6,1];
+			var i = 0;
+			while(i < this.slotNumber) {
+				this.preChoosedPosition1[i] = this.getRandomInt(0,6);
+				this.preChoosedPosition2[i] = this.getRandomInt(0,6);
+				this.preChoosedPosition3[i] = this.getRandomInt(0,6);
+				this.slotSprite1[i].tilePosition.y = -this.preChoosedPosition1[i] * this.tileHEIGHT;
+				this.slotSprite1[i].tint = 16777215;
+				this.finalTileY1[i] = this.nCycly * this.tileHEIGHT * this.tTiles;
+				this.slotSprite2[i].tilePosition.y = -this.preChoosedPosition2[i] * this.tileHEIGHT;
+				this.slotSprite2[i].tint = 16777215;
+				this.finalTileY2[i] = this.nCycly * this.tileHEIGHT * this.tTiles;
+				this.slotSprite3[i].tilePosition.y = -this.preChoosedPosition3[i] * this.tileHEIGHT;
+				this.slotSprite3[i].tint = 16777215;
+				this.finalTileY3[i] = this.nCycly * this.tileHEIGHT * this.tTiles;
+				i++;
+			}
+			this.gameStatus = this.gameStateMOVING;
+		}
+		if(this.gameStatus == this.gameStateZERO) this.gameStatus = this.gameStateINIT; else if(this.gameStatus == this.gameStateINIT) this.gameStatus = this.gameStateCHECK_WIN; else if(this.gameStatus == this.gameStateMOVING) {
+			var i1 = 0;
+			while(i1 < this.slotNumber) {
+				if(this.finalTileY1[i1] > 0) {
+					this.slotSprite1[i1].tilePosition.y = this.slotSprite1[i1].tilePosition.y + this.inc[i1];
+					this.finalTileY1[i1] = this.finalTileY1[i1] - this.inc[i1];
+				}
+				if(this.finalTileY2[i1] > 0) {
+					this.slotSprite2[i1].tilePosition.y = this.slotSprite2[i1].tilePosition.y + this.inc[i1];
+					this.finalTileY2[i1] = this.finalTileY2[i1] - this.inc[i1];
+				}
+				if(this.finalTileY3[i1] > 0) {
+					this.slotSprite3[i1].tilePosition.y = this.slotSprite3[i1].tilePosition.y + this.inc[i1];
+					this.finalTileY3[i1] = this.finalTileY3[i1] - this.inc[i1];
+				}
+				i1++;
+			}
+			if(this.finalTileY1[0] - 5 <= 0) this.gameStatus = this.gameStatusStop;
+			if(this.finalTileY2[0] - 5 <= 0) this.gameStatus = this.gameStatusStop;
+			if(this.finalTileY3[0] - 5 <= 0) this.gameStatus = this.gameStatusStop;
+		} else if(this.gameStatus == this.gameStateCHECK_WIN) return;
+		window.requestAnimationFrame($bind(this,this.startAnimation));
+	}
+	,getRandomInt: function(min,max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 });
 var Perf = $hx_exports.Perf = function(pos,offset) {
