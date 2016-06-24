@@ -547,184 +547,205 @@ class Main extends Application {
             }
             gameStatus = gameStateMOVING;
 
-        //      if (preChoosedPosition3[i] != preChoosedPosition3[i - 1]) {
-        //         var union = preChoosedPosition1.concat(preChoosedPosition2);
-        //         var store = union.concat(preChoosedPosition3);
-        //         x = 0;
-        //         while (x < 15) {
-        //             switch (store[x]) {
-        //                 case 0:
-        //                     can0++;
-        //                     break;
-        //                 case 1:
-        //                     can1++;
-        //                     break;
-        //                 case 2:
-        //                     can2++;
-        //                     break;
-        //                 case 3:
-        //                     can3++;
-        //                     break;
-        //                 case 4:
-        //                     can4++;
-        //                     break;
-        //                 case 5:
-        //                     can5++;
-        //                     break;
-        //                 case 6:
-        //                     can6++;
-        //                     break;
-        //             }
-        //             x++;
-        //         }
-        //         result  = [can0, can1, can2, can3, can4, can5, can6];
-        //         result2 = [can0, can1, can2, can3, can4, can5, can6];
-        //     }
-           
+             if (preChoosedPosition3[i] != preChoosedPosition3[i - 1]) {
+                var union = preChoosedPosition1.concat(preChoosedPosition2);
+                var store = union.concat(preChoosedPosition3);
+                var x = 0;
+                var can0 = 0;
+                var can1 = 0;
+                var can2 = 0;
+                var can3 = 0;
+                var can4 = 0;
+                var can5 = 0;
+                var can6 = 0;
+                while (x < 15) {
+                    switch store[x] {
+                        case 0:
+                            can0++;
+            
+                        case 1:
+                            can1++;
+                            
+                        case 2:
+                            can2++;
+                            
+                        case 3:
+                            can3++;
+                        
+                        case 4:
+                            can4++;
+                            
+                        case 5:
+                            can5++;
+                            
+                        case 6:
+                            can6++;
+                            
+                    }
+                    x++;
+                }
+                var result  = [can0, can1, can2, can3, can4, can5, can6];
+                var result2 = [can0, can1, can2, can3, can4, can5, can6];
+               
+                 
+            
 
-        //     setTimeout(
-        //         function() {
+           Browser.window.setTimeout(
+                function() {
 
-        //             if (sortThisBaby(result2)) {
-        //                 switch (indexOfMax(result)) {
-        //                     case 0:
-        //                         winnerCandidateImg.texture = textureVucicFrame;
-        //                         interactive(true);
-        //                         if (finalCandidate == 0) {
+                    if (sortThisBaby(result2)) {
+                        
+                        switch indexOfMax(result) {
+                            case 0:
+                           
+                                // winnerCandidateImg.texture = textureVucicFrame;
+                                // interactive(true);
+                                // if (finalCandidate == 0) {
 
-        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin();
+                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin();
 
-        //                         } else {
-        //                             hightlight(0);
-        //                             textUpadete(config.vucicMessage, 443, 45);
-        //                             playSound('assets/sounds/vucic/tisina.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
+                                // } else {
+                                    hightlight(0);
+                                //     textUpadete(config.vucicMessage, 443, 45);
+                                //     playSound('assets/sounds/vucic/tisina.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
 
-        //                         }
-        //                         break;
-        //                     case 1:
-        //                         winnerCandidateImg.texture = textureDacicFrame;
-        //                         interactive(true);
+                                // }
+                                
+                            case 1:
+                            
+                                // winnerCandidateImg.texture = textureDacicFrame;
+                                // interactive(true);
 
-        //                         if (finalCandidate == 1) {
-        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin();
+                                // if (finalCandidate == 1) {
+                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin();
 
-        //                         } else {
-        //                             hightlight(1);
-        //                             textUpadete(config.dacicMessage, 483, 45);
-        //                             playSound('assets/sounds/dacic/miljacka2.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
-        //                         }
-        //                         break;
-        //                     case 2:
-        //                         winnerCandidateImg.texture = textureTomaFrame;
-        //                         interactive(true);
+                                // } else {
+                                    hightlight(1);
+                                //     textUpadete(config.dacicMessage, 483, 45);
+                                //     playSound('assets/sounds/dacic/miljacka2.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
+                                // }
+                              
+                            case 2:
+                             
+                                // winnerCandidateImg.texture = textureTomaFrame;
+                                // interactive(true);
 
-        //                         if (finalCandidate == 2) {
-        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin();
-        //                         } else {
-        //                             hightlight(2);
-        //                             textUpadete(config.tomaMessage, 432, 45);
-        //                             playSound('assets/sounds/toma/engleski.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
-        //                         }
-        //                         break;
-        //                     case 3:
-        //                         winnerCandidateImg.texture = textureTadicFrame;
-        //                         interactive(true);
+                                // if (finalCandidate == 2) {
+                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin();
+                                // } else {
+                                    hightlight(2);
+                                //     textUpadete(config.tomaMessage, 432, 45);
+                                //     playSound('assets/sounds/toma/engleski.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
+                                // }
+                                
+                            case 3:
+                         
+                                // winnerCandidateImg.texture = textureTadicFrame;
+                                // interactive(true);
 
-        //                         if (finalCandidate == 3) {
-        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin();
-        //                         } else {
-        //                             hightlight(3);
-        //                             textUpadete(config.tadicMessage, 470, 45);
-        //                             playSound('assets/sounds/tadic/mac.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
-        //                         }
-        //                         break;
-        //                     case 4:
-        //                         winnerCandidateImg.texture = textureCedaFrame;
-        //                         interactive(true);
+                                // if (finalCandidate == 3) {
+                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin();
+                                // } else {
+                                    hightlight(3);
+                                //     textUpadete(config.tadicMessage, 470, 45);
+                                //     playSound('assets/sounds/tadic/mac.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
+                                // }
+                               
+                            case 4:
+                       
+                                // winnerCandidateImg.texture = textureCedaFrame;
+                                // interactive(true);
 
-        //                         if (finalCandidate == 4) {
-        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin();
-        //                         } else {
-        //                             hightlight(4);
-        //                             textUpadete(config.cedaMessage, 469, 45);
-        //                             playSound('assets/sounds/ceda/gospodjo2.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
-        //                         }
+                                // if (finalCandidate == 4) {
+                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin();
+                                // } else {
+                                    hightlight(4);
+                                //     textUpadete(config.cedaMessage, 469, 45);
+                                //     playSound('assets/sounds/ceda/gospodjo2.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
+                                // }
 
-        //                         break;
-        //                     case 5:
-        //                         winnerCandidateImg.texture = textureCanakFrame;
-        //                         interactive(true);
+                               
+                            case 5:
+                
+                                // winnerCandidateImg.texture = textureCanakFrame;
+                                // interactive(true);
 
-        //                         if (finalCandidate == 5) {
-        //                             textUpadete(config.winnerMessage, 635, 45, config.winnerColor);
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin();
-        //                         } else {
-        //                             hightlight(5);
-        //                             textUpadete(config.canakMessage, 363, 45);
-        //                             playSound('assets/sounds/canak/sat.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
-        //                         }
-        //                         break;
-        //                     case 6:
-        //                         winnerCandidateImg.texture = textureSeseljFrame;
-        //                         interactive(true);
+                                // if (finalCandidate == 5) {
+                                //     textUpadete(config.winnerMessage, 635, 45, config.winnerColor);
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin();
+                                // } else {
+                                    hightlight(5);
+                                //     textUpadete(config.canakMessage, 363, 45);
+                                //     playSound('assets/sounds/canak/sat.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
+                                // }
+                               
+                            case 6:
+                        
+                                // winnerCandidateImg.texture = textureSeseljFrame;
+                                // interactive(true);
 
-        //                         if (finalCandidate == 6) {
-        //                             textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
-        //                             canvasWinerLine();
-        //                             playSound('assets/sounds/win.mp3');
-        //                             canvasWinerLine();
-        //                             calcWin();
-        //                             onWinAmin()
-        //                         } else {
-        //                             hightlight(6);
-        //                             textUpadete(config.seseljMessage, 388, 45);
-        //                             playSound('assets/sounds/seselj/olja.mp3');
-        //                             canvasLine();
-        //                             calcDefeat();
-        //                         }
-        //                         break;
-        //                 }
-        //             } else {
-        //                 startAnimation()
-        //                 textUpadete(config.equalMessage, 500, 45);
-        //                 interactive(false);
-        //             }
-        //         }, 2800);
+                                // if (finalCandidate == 6) {
+                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                //     canvasWinerLine();
+                                //     playSound('assets/sounds/win.mp3');
+                                //     canvasWinerLine();
+                                //     calcWin();
+                                //     onWinAmin()
+                                // } else {
+                                    hightlight(6);
+                                //     textUpadete(config.seseljMessage, 388, 45);
+                                //     playSound('assets/sounds/seselj/olja.mp3');
+                                //     canvasLine();
+                                //     calcDefeat();
+                                // }
+                              
+                         // Browser.window.alert('true');
+                          default:
+                           
+                        }
+                    } else {
+                        restart();
+                        startAnimation();
+                        // textUpadete(config.equalMessage, 500, 45);
+                        // interactive(false);
+                         
+                    }
+                }, 2800);}
         // }
 
     }
@@ -808,7 +829,7 @@ class Main extends Application {
         stage.removeChild(winnerCheck2);
     }
 
-     function hightlight(value,preChoosedPosition1,preChoosedPosition2,preChoosedPosition3,slotSprite1,slotSprite2,slotSprite3) {
+     function hightlight(value) {
         var x = 0;
         while (x < 6) {
             if (preChoosedPosition1[x] == value) {
@@ -936,27 +957,35 @@ class Main extends Application {
         return [getRandomInt(0, 6), getRandomInt(0, 6), getRandomInt(0, 6)];
     }
 
-    function sortThisBaby(arr:Array<Dynamic>) {
-        // arr = untyped arr.sort(function(a, b) {
-        //     return b - a;
-        // });
-        // if (arr[0] != arr[1]) return true;
+    function sortThisBaby(arr:Array<Int>) {
+       arr.sort(function(a, b) {
+            return b - a;
+        });
+        if (arr[0] != arr[1]) {
+            return true;
+        }
+        else{
+            return false;
+        }
+        
     }
 
-    function indexOfMax(arr) {
-        // if (arr.length === 0) return -1;
+    function indexOfMax(arr:Array<Int>) {
+        if (arr.length == 0) return -1;
 
-        // var max = arr[0];
-        // var maxIndex = 0;
-
-        // for (var i = 1; i < arr.length; i++) {
-        //     if (arr[i] > max) {
-        //         maxIndex = i;
-        //         max = arr[i];
-        //     }
-        // }
-        // return maxIndex;
+        var max = arr[0];
+        var maxIndex = 0;
+        var i = 1;
+        while (i < arr.length) {
+            if (arr[i] > max) {
+                maxIndex = i;
+                max = arr[i];
+            }
+            i++;
+        }
+        return maxIndex;
     }
+
 
 	static function main() {
 		new Main();

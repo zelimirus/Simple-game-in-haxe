@@ -366,6 +366,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.gameStatus = this.gameStateINIT;
 	}
 	,startAnimation: function() {
+		var _g = this;
 		if(this.gameStatus == this.gameStateINIT || this.gameStatus == this.gameStateCHECK_WIN) {
 			this.preChoosedPosition1 = [0,2,4,6,1];
 			this.preChoosedPosition2 = [0,2,4,6,1];
@@ -387,6 +388,79 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 				i++;
 			}
 			this.gameStatus = this.gameStateMOVING;
+			if(this.preChoosedPosition3[i] != this.preChoosedPosition3[i - 1]) {
+				var union = this.preChoosedPosition1.concat(this.preChoosedPosition2);
+				var store = union.concat(this.preChoosedPosition3);
+				var x = 0;
+				var can0 = 0;
+				var can1 = 0;
+				var can2 = 0;
+				var can3 = 0;
+				var can4 = 0;
+				var can5 = 0;
+				var can6 = 0;
+				while(x < 15) {
+					var _g1 = store[x];
+					switch(_g1) {
+					case 0:
+						can0++;
+						break;
+					case 1:
+						can1++;
+						break;
+					case 2:
+						can2++;
+						break;
+					case 3:
+						can3++;
+						break;
+					case 4:
+						can4++;
+						break;
+					case 5:
+						can5++;
+						break;
+					case 6:
+						can6++;
+						break;
+					}
+					x++;
+				}
+				var result = [can0,can1,can2,can3,can4,can5,can6];
+				var result2 = [can0,can1,can2,can3,can4,can5,can6];
+				window.setTimeout(function() {
+					if(_g.sortThisBaby(result2)) {
+						var _g11 = _g.indexOfMax(result);
+						switch(_g11) {
+						case 0:
+							_g.hightlight(0);
+							break;
+						case 1:
+							_g.hightlight(1);
+							break;
+						case 2:
+							_g.hightlight(2);
+							break;
+						case 3:
+							_g.hightlight(3);
+							break;
+						case 4:
+							_g.hightlight(4);
+							break;
+						case 5:
+							_g.hightlight(5);
+							break;
+						case 6:
+							_g.hightlight(6);
+							break;
+						default:
+						}
+					} else {
+						_g.restart();
+						_g.startAnimation();
+					}
+				},2800);
+			}
 		}
 		if(this.gameStatus == this.gameStateZERO) this.gameStatus = this.gameStateINIT; else if(this.gameStatus == this.gameStateINIT) this.gameStatus = this.gameStateCHECK_WIN; else if(this.gameStatus == this.gameStateMOVING) {
 			var i1 = 0;
@@ -411,8 +485,37 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		} else if(this.gameStatus == this.gameStateCHECK_WIN) return;
 		window.requestAnimationFrame($bind(this,this.startAnimation));
 	}
+	,hightlight: function(value) {
+		var x = 0;
+		while(x < 6) {
+			if(this.preChoosedPosition1[x] == value) this.slotSprite1[x].tint = 99964444;
+			if(this.preChoosedPosition2[x] == value) this.slotSprite2[x].tint = 99964444;
+			if(this.preChoosedPosition3[x] == value) this.slotSprite3[x].tint = 99964444;
+			x++;
+		}
+	}
 	,getRandomInt: function(min,max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+	,sortThisBaby: function(arr) {
+		arr.sort(function(a,b) {
+			return b - a;
+		});
+		if(arr[0] != arr[1]) return true; else return false;
+	}
+	,indexOfMax: function(arr) {
+		if(arr.length == 0) return -1;
+		var max = arr[0];
+		var maxIndex = 0;
+		var i = 1;
+		while(i < arr.length) {
+			if(arr[i] > max) {
+				maxIndex = i;
+				max = arr[i];
+			}
+			i++;
+		}
+		return maxIndex;
 	}
 });
 var Perf = $hx_exports.Perf = function(pos,offset) {
