@@ -5,6 +5,13 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var HxOverrides = function() { };
+HxOverrides.__name__ = true;
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) return undefined;
+	return x;
+};
 var pixi_plugins_app_Application = function() {
 	this._animationFrameId = null;
 	this.pixelRatio = 1;
@@ -21,6 +28,7 @@ var pixi_plugins_app_Application = function() {
 	this.height = window.innerHeight;
 	this.set_fps(60);
 };
+pixi_plugins_app_Application.__name__ = true;
 pixi_plugins_app_Application.prototype = {
 	set_fps: function(val) {
 		this._frameCount = 0;
@@ -86,9 +94,50 @@ pixi_plugins_app_Application.prototype = {
 	}
 };
 var Main = function() {
+	this.test = 0;
+	this.showWinn = new PIXI.Text("0",{ font : "bold 12px Arial", align : "center", fill : "#A4CC00"});
+	this.congr = new PIXI.Text("Prekidamo politički program\n zbog ekskluzivnih  vesti!\n Nepoznati kladioničar\n osvojio brdo keša!",{ font : "bold 30px Arial", align : "center", fill : "#A4CC00"});
+	this.tvAntenaEnd2 = new PIXI.Graphics();
+	this.tvAntenaEnd1 = new PIXI.Graphics();
+	this.tvAntena2 = new PIXI.Graphics();
+	this.tvAntena1 = new PIXI.Graphics();
+	this.tv = new PIXI.Graphics();
+	this.stake = new PIXI.Text("100",{ font : "bold 18px Arial"});
+	this.creditValueShow = new PIXI.Text("5000",{ font : "bold 18px Arial"});
+	this.credit = new PIXI.Text("CREDIT:",{ font : "bold 18px Arial"});
+	this.minButton = new PIXI.Text("MIN",{ font : "20px Arial", fill : "#ff0000", align : "center"});
+	this.maxButton = new PIXI.Text("MAX",{ font : "20px Arial", fill : "#ff0000", align : "center"});
+	this.message = new PIXI.Text("dobrodošli",{ font : "bold 15px Arial", fill : "#ff0000", align : "center"});
+	this.volumeOnOF = new PIXI.Text("Isključi zvuk",{ font : "20px Arial", fill : "#ff0000", align : "center"});
+	this.arrowLeft = new PIXI.Graphics();
+	this.arrowRight = new PIXI.Graphics();
+	this.winnerCheck2 = new PIXI.Graphics();
+	this.winnerCheck = new PIXI.Graphics();
+	this.line2 = new PIXI.Graphics();
+	this.line1 = new PIXI.Graphics();
+	this.imgBody = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/ram2.png"));
+	this.imgButton = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/start.png"));
+	this.yourCandidateImg = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/vucic-ram.png"));
+	this.selectSeselj = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/seselj-ram.png"));
+	this.selectCanak = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/canak-ram.png"));
+	this.selectCeda = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/ceda-ram.png"));
+	this.selectTadic = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/tadic-ram.png"));
+	this.selectToma = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/toma-ram.png"));
+	this.selectDacic = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/dacic-ram.png"));
+	this.selectVucic = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/vucic-ram.png"));
+	this.winnerCandidateImg = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/vucic-ram.png"));
+	this.textureSeseljFrame = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
+	this.textureCanakFrame = PIXI.Texture.fromImage("assets/images/canak-ram.png");
+	this.textureCedaFrame = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
+	this.textureTadicFrame = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
+	this.textureTomaFrame = PIXI.Texture.fromImage("assets/images/toma-ram.png");
+	this.textureDacicFrame = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
+	this.textureVucicFrame = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
 	this.imgSlot = "assets/images/slot3.png";
 	this.inc = [25,35,50,70,100];
 	this.i = 0;
+	this.invested = 0;
+	this.yourCandidate = 0;
 	this.preChoosedPosition3 = [6,1,2,4,0];
 	this.preChoosedPosition2 = [2,0,6,3,4];
 	this.preChoosedPosition1 = [0,2,4,6,1];
@@ -110,7 +159,6 @@ var Main = function() {
 	this.tileHEIGHT = 100;
 	this.initalX = 395;
 	this.slotNumber = 5;
-	this.gameStatusStop = 4;
 	this.gameStateCHECK_WIN = 3;
 	this.gameStateMOVING = 2;
 	this.gameStateINIT = 1;
@@ -118,6 +166,7 @@ var Main = function() {
 	pixi_plugins_app_Application.call(this);
 	this._init();
 };
+Main.__name__ = true;
 Main.main = function() {
 	new Main();
 };
@@ -137,95 +186,99 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		var textureCeda = PIXI.Texture.fromImage("assets/images/ceda.jpg");
 		var textureCanak = PIXI.Texture.fromImage("assets/images/canak.jpg");
 		var textureSeselj = PIXI.Texture.fromImage("assets/images/seselj.jpg");
-		var textureVucicFrame = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
-		var textureDacicFrame = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
-		var textureTomaFrame = PIXI.Texture.fromImage("assets/images/toma-ram.png");
-		var textureTadicFrame = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
-		var textureCedaFrame = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
-		var textureCanakFrame = PIXI.Texture.fromImage("assets/images/canak-ram.png");
-		var textureSeseljFrame = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
 		var texture3 = PIXI.Texture.fromImage(this.imgSlot);
-		var selectVucic = new PIXI.Sprite(textureVucicFrame);
-		selectVucic.height = this.selectCandidateHight;
-		selectVucic.width = this.selectCandidateWidth;
-		selectVucic.y = this.selectCandidateInitalY;
-		selectVucic.x = this.selectCandidateInitalX;
-		this.stage.addChild(selectVucic);
-		selectVucic.interactive = true;
-		var selectDacic = new PIXI.Sprite(textureDacicFrame);
-		selectDacic.height = this.selectCandidateHight;
-		selectDacic.width = this.selectCandidateWidth;
-		selectDacic.y = this.selectCandidateInitalY;
-		selectDacic.x = this.selectCandidateInitalX + 80;
-		this.stage.addChild(selectDacic);
-		selectDacic.interactive = true;
-		var selectToma = new PIXI.Sprite(textureTomaFrame);
-		selectToma.height = this.selectCandidateHight;
-		selectToma.width = this.selectCandidateWidth;
-		selectToma.y = this.selectCandidateInitalY;
-		selectToma.x = this.selectCandidateInitalX + 160;
-		this.stage.addChild(selectToma);
-		selectToma.interactive = true;
-		var selectTadic = new PIXI.Sprite(textureTadicFrame);
-		selectTadic.height = this.selectCandidateHight;
-		selectTadic.width = this.selectCandidateWidth;
-		selectTadic.y = this.selectCandidateInitalY;
-		selectTadic.x = this.selectCandidateInitalX + 240;
-		this.stage.addChild(selectTadic);
-		selectTadic.interactive = true;
-		var selectCeda = new PIXI.Sprite(textureCedaFrame);
-		selectCeda.height = this.selectCandidateHight;
-		selectCeda.width = this.selectCandidateWidth;
-		selectCeda.y = this.selectCandidateInitalY;
-		selectCeda.x = this.selectCandidateInitalX + 320;
-		this.stage.addChild(selectCeda);
-		selectCeda.interactive = true;
-		var selectCanak = new PIXI.Sprite(textureCanakFrame);
-		selectCanak.height = this.selectCandidateHight;
-		selectCanak.width = this.selectCandidateWidth;
-		selectCanak.y = this.selectCandidateInitalY;
-		selectCanak.x = this.selectCandidateInitalX + 400;
-		this.stage.addChild(selectCanak);
-		selectCanak.interactive = true;
-		var selectSeselj = new PIXI.Sprite(textureSeseljFrame);
-		selectSeselj.height = this.selectCandidateHight;
-		selectSeselj.width = this.selectCandidateWidth;
-		selectSeselj.y = this.selectCandidateInitalY;
-		selectSeselj.x = this.selectCandidateInitalX + 480;
-		this.stage.addChild(selectSeselj);
-		selectSeselj.interactive = true;
-		var yourCandidateImg = new PIXI.Sprite(textureVucicFrame);
-		yourCandidateImg.height = 250;
-		yourCandidateImg.width = yourCandidateImg.height;
-		yourCandidateImg.y = 150;
-		yourCandidateImg.x = 50;
-		this.stage.addChild(yourCandidateImg);
-		var winnerCandidateImg = new PIXI.Sprite(textureVucicFrame);
-		winnerCandidateImg.height = 250;
-		winnerCandidateImg.width = winnerCandidateImg.height;
-		winnerCandidateImg.y = 150;
-		winnerCandidateImg.x = 1000;
-		this.stage.addChild(winnerCandidateImg);
-		var volumeStyle = { font : "20px Arial", fill : "#ff0000", align : "center"};
-		var volumeOnOF = new PIXI.Text("Isključi zvuk",volumeStyle);
-		volumeOnOF.x = 1170;
-		volumeOnOF.y = 10;
-		volumeOnOF.interactive = true;
-		this.stage.addChild(volumeOnOF);
-		var messageStyle = { font : "bold 15px Arial", fill : "#ff0000", align : "center"};
-		var message = new PIXI.Text("dobrodošli",messageStyle);
-		message.x = 613;
-		message.y = 45;
-		this.stage.addChild(message);
 		var creditStyle = { font : "bold 18px Arial"};
-		var credit = new PIXI.Text("CREDIT:",creditStyle);
-		credit.x = 595;
-		credit.y = 10;
-		this.stage.addChild(credit);
-		var creditValueShow = new PIXI.Text(this.creditValue,creditStyle);
-		creditValueShow.x = 670;
-		creditValueShow.y = 10;
-		this.stage.addChild(creditValueShow);
+		var volumeStyle_font = "20px Arial";
+		var volumeStyle_fill = "#ff0000";
+		var volumeStyle_align = "center";
+		this.selectVucic.height = this.selectCandidateHight;
+		this.selectVucic.width = this.selectCandidateWidth;
+		this.selectVucic.y = this.selectCandidateInitalY;
+		this.selectVucic.x = this.selectCandidateInitalX;
+		this.stage.addChild(this.selectVucic);
+		this.selectVucic.interactive = true;
+		this.selectVucic.on("mouseover",$bind(this,this.onVucicOver));
+		this.selectVucic.on("mouseout",$bind(this,this.onVucicOut));
+		this.selectVucic.on("click",$bind(this,this.addVucic));
+		this.selectDacic.height = this.selectCandidateHight;
+		this.selectDacic.width = this.selectCandidateWidth;
+		this.selectDacic.y = this.selectCandidateInitalY;
+		this.selectDacic.x = this.selectCandidateInitalX + 80;
+		this.stage.addChild(this.selectDacic);
+		this.selectDacic.interactive = true;
+		this.selectDacic.on("mouseover",$bind(this,this.onDacicOver));
+		this.selectDacic.on("mouseout",$bind(this,this.onDacicOut));
+		this.selectDacic.on("click",$bind(this,this.addDacic));
+		this.selectToma.height = this.selectCandidateHight;
+		this.selectToma.width = this.selectCandidateWidth;
+		this.selectToma.y = this.selectCandidateInitalY;
+		this.selectToma.x = this.selectCandidateInitalX + 160;
+		this.stage.addChild(this.selectToma);
+		this.selectToma.interactive = true;
+		this.selectToma.on("mouseover",$bind(this,this.onTomaOver));
+		this.selectToma.on("mouseout",$bind(this,this.onTomaOut));
+		this.selectToma.on("click",$bind(this,this.addToma));
+		this.selectTadic.height = this.selectCandidateHight;
+		this.selectTadic.width = this.selectCandidateWidth;
+		this.selectTadic.y = this.selectCandidateInitalY;
+		this.selectTadic.x = this.selectCandidateInitalX + 240;
+		this.stage.addChild(this.selectTadic);
+		this.selectTadic.interactive = true;
+		this.selectTadic.on("mouseover",$bind(this,this.onTadicOver));
+		this.selectTadic.on("mouseout",$bind(this,this.onTadicOut));
+		this.selectTadic.on("click",$bind(this,this.addTadic));
+		this.selectCeda.height = this.selectCandidateHight;
+		this.selectCeda.width = this.selectCandidateWidth;
+		this.selectCeda.y = this.selectCandidateInitalY;
+		this.selectCeda.x = this.selectCandidateInitalX + 320;
+		this.stage.addChild(this.selectCeda);
+		this.selectCeda.interactive = true;
+		this.selectCeda.on("mouseover",$bind(this,this.onCedaOver));
+		this.selectCeda.on("mouseout",$bind(this,this.onCedaOut));
+		this.selectCeda.on("click",$bind(this,this.addCeda));
+		this.selectCanak.height = this.selectCandidateHight;
+		this.selectCanak.width = this.selectCandidateWidth;
+		this.selectCanak.y = this.selectCandidateInitalY;
+		this.selectCanak.x = this.selectCandidateInitalX + 400;
+		this.stage.addChild(this.selectCanak);
+		this.selectCanak.interactive = true;
+		this.selectCanak.on("mouseover",$bind(this,this.onCanakOver));
+		this.selectCanak.on("mouseout",$bind(this,this.onCanakOut));
+		this.selectCanak.on("click",$bind(this,this.addCanak));
+		this.selectSeselj.height = this.selectCandidateHight;
+		this.selectSeselj.width = this.selectCandidateWidth;
+		this.selectSeselj.y = this.selectCandidateInitalY;
+		this.selectSeselj.x = this.selectCandidateInitalX + 480;
+		this.stage.addChild(this.selectSeselj);
+		this.selectSeselj.interactive = true;
+		this.selectSeselj.on("mouseover",$bind(this,this.onSeseljOver));
+		this.selectSeselj.on("mouseout",$bind(this,this.onSeseljOut));
+		this.selectSeselj.on("click",$bind(this,this.addSeselj));
+		this.yourCandidateImg.height = 250;
+		this.yourCandidateImg.width = this.yourCandidateImg.height;
+		this.yourCandidateImg.y = 150;
+		this.yourCandidateImg.x = 50;
+		this.stage.addChild(this.yourCandidateImg);
+		this.winnerCandidateImg.height = 250;
+		this.winnerCandidateImg.width = this.winnerCandidateImg.height;
+		this.winnerCandidateImg.y = 150;
+		this.winnerCandidateImg.x = 1000;
+		this.stage.addChild(this.winnerCandidateImg);
+		this.volumeOnOF.x = 1170;
+		this.volumeOnOF.y = 10;
+		this.volumeOnOF.interactive = true;
+		this.stage.addChild(this.volumeOnOF);
+		this.volumeOnOF.on("mouseover",$bind(this,this.volumeOnOFHover));
+		this.volumeOnOF.on("mouseout",$bind(this,this.volumeOnOFHoverOut));
+		this.message.x = 613;
+		this.message.y = 45;
+		this.stage.addChild(this.message);
+		this.credit.x = 595;
+		this.credit.y = 10;
+		this.stage.addChild(this.credit);
+		this.creditValueShow.x = 670;
+		this.creditValueShow.y = 10;
+		this.stage.addChild(this.creditValueShow);
 		var candidatePresent = new PIXI.Text("Tvoj kandidat",creditStyle);
 		candidatePresent.x = 120;
 		candidatePresent.y = 120;
@@ -238,11 +291,10 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		select.x = 509;
 		select.y = 500;
 		this.stage.addChild(select);
-		var imgBody = new PIXI.Sprite(texture1);
-		imgBody.x = 353;
-		imgBody.y = 70;
-		imgBody.width = 608;
-		imgBody.height = 378;
+		this.imgBody.x = 353;
+		this.imgBody.y = 70;
+		this.imgBody.width = 608;
+		this.imgBody.height = 378;
 		while(this.i < this.slotNumber) {
 			this.slotSprite1[this.i] = new PIXI.extras.TilingSprite(texture3,this.tileHEIGHT,this.tileWIDTH);
 			this.slotSprite1[this.i].tilePosition.x = 0;
@@ -272,98 +324,214 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 			this.stage.addChild(this.slotSprite3[this.i]);
 			this.i++;
 		}
-		var imgButton = new PIXI.Sprite(texture2);
-		imgButton.x = 606;
-		imgButton.y = 450;
-		imgButton.height = 40;
-		imgButton.width = 100;
-		imgButton.interactive = true;
-		imgButton.on("mousedown",$bind(this,this.startAnimation));
-		imgButton.on("mousedown",$bind(this,this.restart));
-		this.stage.addChild(imgBody);
-		this.stage.addChild(imgButton);
-		var line1 = new PIXI.Graphics();
-		var line2 = new PIXI.Graphics();
-		var winnerCheck = new PIXI.Graphics();
-		var winnerCheck2 = new PIXI.Graphics();
-		var arrowRight = new PIXI.Graphics();
-		var arrowLeft = new PIXI.Graphics();
-		arrowLeft.beginFill(10800128);
-		arrowLeft.moveTo(545,635);
-		arrowLeft.lineTo(565,620);
-		arrowLeft.lineTo(565,630);
-		arrowLeft.lineTo(605,630);
-		arrowLeft.lineTo(605,640);
-		arrowLeft.lineTo(565,640);
-		arrowLeft.lineTo(565,650);
-		arrowRight.beginFill(10800128);
-		arrowRight.moveTo(763,635);
-		arrowRight.lineTo(743,620);
-		arrowRight.lineTo(743,630);
-		arrowRight.lineTo(703,630);
-		arrowRight.lineTo(703,640);
-		arrowRight.lineTo(743,640);
-		arrowRight.lineTo(743,650);
+		this.imgButton.x = 606;
+		this.imgButton.y = 450;
+		this.imgButton.height = 40;
+		this.imgButton.width = 100;
+		this.imgButton.interactive = true;
+		this.imgButton.on("mousedown",$bind(this,this.restart));
+		this.imgButton.on("mousedown",$bind(this,this.call));
+		this.stage.addChild(this.imgBody);
+		this.stage.addChild(this.imgButton);
+		this.arrowLeft.beginFill(10800128);
+		this.arrowLeft.moveTo(545,635);
+		this.arrowLeft.lineTo(565,620);
+		this.arrowLeft.lineTo(565,630);
+		this.arrowLeft.lineTo(605,630);
+		this.arrowLeft.lineTo(605,640);
+		this.arrowLeft.lineTo(565,640);
+		this.arrowLeft.lineTo(565,650);
+		this.arrowRight.beginFill(10800128);
+		this.arrowRight.moveTo(763,635);
+		this.arrowRight.lineTo(743,620);
+		this.arrowRight.lineTo(743,630);
+		this.arrowRight.lineTo(703,630);
+		this.arrowRight.lineTo(703,640);
+		this.arrowRight.lineTo(743,640);
+		this.arrowRight.lineTo(743,650);
 		var stakeValue = "100";
-		var stake = new PIXI.Text(stakeValue,creditStyle);
-		stake.y = 625;
-		stake.x = 640;
-		this.stage.addChild(arrowLeft);
-		this.stage.addChild(arrowRight);
-		this.stage.addChild(line1);
-		this.stage.addChild(line2);
-		this.stage.addChild(winnerCheck);
-		this.stage.addChild(stake);
-		arrowLeft.interactive = true;
-		arrowRight.interactive = true;
-		var minButton = new PIXI.Text("MIN",volumeStyle);
-		minButton.x = 470;
-		minButton.y = 624;
-		minButton.interactive = true;
-		this.stage.addChild(minButton);
-		var maxButton = new PIXI.Text("MAX",volumeStyle);
-		maxButton.x = 797;
-		maxButton.y = minButton.y;
-		maxButton.interactive = true;
-		this.stage.addChild(maxButton);
-		var tv = new PIXI.Graphics();
-		tv.beginFill(16737996);
-		tv.lineStyle(17,0,1);
-		tv.moveTo(390,100);
-		tv.lineTo(390,420);
-		tv.lineTo(923,420);
-		tv.lineTo(923,100);
-		tv.lineTo(390,100);
-		var tvAntena1 = new PIXI.Graphics();
-		tvAntena1.lineStyle(10,0,1);
-		tvAntena1.moveTo(600,100);
-		tvAntena1.quadraticCurveTo(480,20,430,20);
-		var tvAntena2 = new PIXI.Graphics();
-		tvAntena2.lineStyle(10,0,1);
-		tvAntena2.moveTo(700,100);
-		tvAntena2.quadraticCurveTo(820,20,850,20);
-		var tvAntenaEnd1 = new PIXI.Graphics();
-		tvAntenaEnd1.lineStyle(0);
-		tvAntenaEnd1.beginFill(0);
-		tvAntenaEnd1.drawCircle(850,18,13);
-		tvAntenaEnd1.endFill();
-		var tvAntenaEnd2 = new PIXI.Graphics();
-		tvAntenaEnd2.lineStyle(0);
-		tvAntenaEnd2.beginFill(0);
-		tvAntenaEnd2.drawCircle(430,18,13);
-		tvAntenaEnd2.endFill();
-		var congrStyle = { font : "bold 30px Arial", align : "center", fill : "#A4CC00"};
-		var congr = new PIXI.Text("Prekidamo politički program\n zbog ekskluzivnih  vesti!\n Nepoznati kladioničar\n osvojio brdo keša!",congrStyle);
-		congr.x = 450;
-		congr.y = 170;
-		var winnStyle = { font : "bold 12px Arial", align : "center", fill : "#A4CC00"};
-		var showWinn = new PIXI.Text("0",winnStyle);
-		showWinn.x = 740;
-		showWinn.y = 13;
-		this.stage.addChild(winnerCheck2);
+		this.stake.y = 625;
+		this.stake.x = 640;
+		this.stage.addChild(this.arrowLeft);
+		this.stage.addChild(this.arrowRight);
+		this.stage.addChild(this.line1);
+		this.stage.addChild(this.line2);
+		this.stage.addChild(this.winnerCheck);
+		this.stage.addChild(this.stake);
+		this.arrowLeft.interactive = true;
+		this.arrowRight.interactive = true;
+		this.arrowLeft.on("mousedown",$bind(this,this.arrowLeftDown));
+		this.arrowLeft.on("mouseup",$bind(this,this.arrowLeftUp));
+		this.arrowLeft.on("mouseover",$bind(this,this.arrowLeftOver));
+		this.arrowLeft.on("mouseout",$bind(this,this.arrowLeftUp));
+		this.arrowLeft.on("click",$bind(this,this.arrowLeftClick));
+		this.arrowRight.on("mousedown",$bind(this,this.arrowRightDown));
+		this.arrowRight.on("mouseup",$bind(this,this.arrowRightUp));
+		this.arrowRight.on("mouseover",$bind(this,this.arrowRightOver));
+		this.arrowRight.on("mouseout",$bind(this,this.arrowRightUp));
+		this.arrowRight.on("click",$bind(this,this.arrowRightClick));
+		this.minButton.x = 470;
+		this.minButton.y = 624;
+		this.minButton.interactive = true;
+		this.stage.addChild(this.minButton);
+		this.minButton.on("mouseover",$bind(this,this.minHover));
+		this.minButton.on("mouseout",$bind(this,this.minHoverOut));
+		this.minButton.on("touchstart",$bind(this,this.min));
+		this.minButton.on("click",$bind(this,this.min));
+		this.maxButton.x = 797;
+		this.maxButton.y = this.minButton.y;
+		this.maxButton.interactive = true;
+		this.stage.addChild(this.maxButton);
+		this.maxButton.on("mouseover",$bind(this,this.maxHover));
+		this.maxButton.on("mouseout",$bind(this,this.maxHoverOut));
+		this.maxButton.on("click",$bind(this,this.max));
+		this.maxButton.on("touchstart",$bind(this,this.max));
+		this.tv.beginFill(16737996);
+		this.tv.lineStyle(17,0,1);
+		this.tv.moveTo(390,100);
+		this.tv.lineTo(390,420);
+		this.tv.lineTo(923,420);
+		this.tv.lineTo(923,100);
+		this.tv.lineTo(390,100);
+		this.tvAntena1.lineStyle(10,0,1);
+		this.tvAntena1.moveTo(600,100);
+		this.tvAntena1.quadraticCurveTo(480,20,430,20);
+		this.tvAntena2.lineStyle(10,0,1);
+		this.tvAntena2.moveTo(700,100);
+		this.tvAntena2.quadraticCurveTo(820,20,850,20);
+		this.tvAntenaEnd1.lineStyle(0);
+		this.tvAntenaEnd1.beginFill(0);
+		this.tvAntenaEnd1.drawCircle(850,18,13);
+		this.tvAntenaEnd1.endFill();
+		this.tvAntenaEnd2.lineStyle(0);
+		this.tvAntenaEnd2.beginFill(0);
+		this.tvAntenaEnd2.drawCircle(430,18,13);
+		this.tvAntenaEnd2.endFill();
+		var congrStyle_font = "bold 30px Arial";
+		var congrStyle_align = "center";
+		var congrStyle_fill = "#A4CC00";
+		this.congr.x = 450;
+		this.congr.y = 170;
+		var winnStyle_font = "bold 12px Arial";
+		var winnStyle_align = "center";
+		var winnStyle_fill = "#A4CC00";
+		this.showWinn.x = 740;
+		this.showWinn.y = 13;
+		this.stage.addChild(this.winnerCheck2);
+	}
+	,max: function() {
+		this.stake.text = this.creditValue;
+	}
+	,min: function() {
+		this.stake.text = "100";
+	}
+	,minHover: function() {
+		this.minButton.scale.x = 1.1;
+		this.minButton.scale.y = 1.1;
+		this.minButton.position.x = this.minButton.position.x - 1;
+		this.minButton.position.y = this.minButton.position.y - 1;
+	}
+	,minHoverOut: function() {
+		this.minButton.scale.x = 1.0;
+		this.minButton.scale.y = 1.0;
+		this.minButton.position.x = this.minButton.position.x + 1;
+		this.minButton.position.y = this.minButton.position.y + 1;
+	}
+	,maxHover: function() {
+		this.maxButton.scale.x = 1.1;
+		this.maxButton.scale.y = 1.1;
+		this.maxButton.position.x = this.maxButton.position.x - 1;
+		this.maxButton.position.y = this.maxButton.position.y - 1;
+	}
+	,maxHoverOut: function() {
+		this.maxButton.scale.x = 1.0;
+		this.maxButton.scale.y = 1.0;
+		this.maxButton.position.x = this.maxButton.position.x + 1;
+		this.maxButton.position.y = this.maxButton.position.y + 1;
+	}
+	,volumeOnOFHover: function() {
+		this.volumeOnOF.scale.x = 1.1;
+		this.volumeOnOF.scale.y = 1.1;
+		this.volumeOnOF.position.x = this.volumeOnOF.position.x - 1;
+		this.volumeOnOF.position.y = this.volumeOnOF.position.y - 1;
+	}
+	,volumeOnOFHoverOut: function() {
+		this.volumeOnOF.scale.x = 1.0;
+		this.volumeOnOF.scale.y = 1.0;
+		this.volumeOnOF.position.x = this.volumeOnOF.position.x + 1;
+		this.volumeOnOF.position.y = this.volumeOnOF.position.y + 1;
+	}
+	,arrowRightClick: function() {
+		var intStake = Std.parseInt(this.stake.text);
+		var intCreditValue = Std.parseInt(this.creditValue);
+		if(intStake < intCreditValue) {
+			intStake = intStake + 100;
+			if(intStake == null) this.stake.text = "null"; else this.stake.text = "" + intStake;
+		}
+	}
+	,arrowLeftClick: function() {
+		var intStake = Std.parseInt(this.stake.text);
+		if(intStake > 100) this.stake.text = Std.string(intStake - 100);
+	}
+	,arrowRightDown: function() {
+		this.arrowRight.tint = 16711680;
+	}
+	,arrowRightUp: function() {
+		this.arrowRight.tint = 10800128;
+	}
+	,arrowLeftDown: function() {
+		this.arrowLeft.tint = 16711680;
+	}
+	,arrowLeftUp: function() {
+		this.arrowLeft.tint = 10800128;
+	}
+	,arrowRightOver: function() {
+		this.arrowRight.tint = 6129408;
+	}
+	,arrowLeftOver: function() {
+		this.arrowLeft.tint = 6129408;
 	}
 	,restart: function() {
+		this.test = 0;
 		this.gameStatus = this.gameStateINIT;
+		this.interactive(false);
+		this.invested = Std.parseInt(this.stake.text);
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+		this.stage.removeChild(this.tv);
+		this.stage.removeChild(this.tvAntena1);
+		this.stage.removeChild(this.tvAntena2);
+		this.stage.removeChild(this.tvAntenaEnd1);
+		this.stage.removeChild(this.tvAntenaEnd2);
+		this.stage.removeChild(this.congr);
+		this.stage.removeChild(this.showWinn);
+		this.stage.addChild(this.imgBody);
+	}
+	,draw: function() {
+		if(this.gameStatus == this.gameStateZERO) this.gameStatus = this.gameStateINIT; else if(this.gameStatus == this.gameStateINIT) this.gameStatus = this.gameStateCHECK_WIN; else if(this.gameStatus == this.gameStateMOVING) {
+			var i = 0;
+			while(i < this.slotNumber) {
+				if(this.finalTileY1[i] > 0) {
+					this.slotSprite1[i].tilePosition.y = this.slotSprite1[i].tilePosition.y + this.inc[i];
+					this.finalTileY1[i] = this.finalTileY1[i] - this.inc[i];
+				}
+				if(this.finalTileY2[i] > 0) {
+					this.slotSprite2[i].tilePosition.y = this.slotSprite2[i].tilePosition.y + this.inc[i];
+					this.finalTileY2[i] = this.finalTileY2[i] - this.inc[i];
+				}
+				if(this.finalTileY3[i] > 0) {
+					this.slotSprite3[i].tilePosition.y = this.slotSprite3[i].tilePosition.y + this.inc[i];
+					this.finalTileY3[i] = this.finalTileY3[i] - this.inc[i];
+				}
+				i++;
+			}
+			if(this.finalTileY1[0] - 5 <= 0) this.gameStatus = this.gameStateCHECK_WIN;
+			if(this.finalTileY2[0] - 5 <= 0) this.gameStatus = this.gameStateCHECK_WIN;
+			if(this.finalTileY3[0] - 5 <= 0) this.gameStatus = this.gameStateCHECK_WIN;
+		} else if(this.gameStatus == this.gameStateCHECK_WIN) return;
+		window.requestAnimationFrame($bind(this,this.draw));
 	}
 	,startAnimation: function() {
 		var _g = this;
@@ -428,30 +596,94 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 				}
 				var result = [can0,can1,can2,can3,can4,can5,can6];
 				var result2 = [can0,can1,can2,can3,can4,can5,can6];
+				this.draw();
 				window.setTimeout(function() {
 					if(_g.sortThisBaby(result2)) {
 						var _g11 = _g.indexOfMax(result);
 						switch(_g11) {
 						case 0:
-							_g.hightlight(0);
+							_g.winnerCandidateImg.texture = _g.textureVucicFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 0) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(0);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						case 1:
-							_g.hightlight(1);
+							_g.winnerCandidateImg.texture = _g.textureDacicFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 1) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(1);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						case 2:
-							_g.hightlight(2);
+							_g.winnerCandidateImg.texture = _g.textureTomaFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 2) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(2);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						case 3:
-							_g.hightlight(3);
+							_g.winnerCandidateImg.texture = _g.textureTadicFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 3) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(3);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						case 4:
-							_g.hightlight(4);
+							_g.winnerCandidateImg.texture = _g.textureCedaFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 4) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(4);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						case 5:
-							_g.hightlight(5);
+							_g.winnerCandidateImg.texture = _g.textureCanakFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 5) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(5);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						case 6:
-							_g.hightlight(6);
+							_g.winnerCandidateImg.texture = _g.textureSeseljFrame;
+							_g.interactive(true);
+							if(_g.yourCandidate == 6) {
+								_g.canvasWinerLine();
+								_g.calcWin();
+							} else {
+								_g.hightlight(6);
+								_g.canvasLine();
+								_g.calcDefeat();
+							}
 							break;
 						default:
 						}
@@ -462,28 +694,107 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 				},2800);
 			}
 		}
-		if(this.gameStatus == this.gameStateZERO) this.gameStatus = this.gameStateINIT; else if(this.gameStatus == this.gameStateINIT) this.gameStatus = this.gameStateCHECK_WIN; else if(this.gameStatus == this.gameStateMOVING) {
-			var i1 = 0;
-			while(i1 < this.slotNumber) {
-				if(this.finalTileY1[i1] > 0) {
-					this.slotSprite1[i1].tilePosition.y = this.slotSprite1[i1].tilePosition.y + this.inc[i1];
-					this.finalTileY1[i1] = this.finalTileY1[i1] - this.inc[i1];
-				}
-				if(this.finalTileY2[i1] > 0) {
-					this.slotSprite2[i1].tilePosition.y = this.slotSprite2[i1].tilePosition.y + this.inc[i1];
-					this.finalTileY2[i1] = this.finalTileY2[i1] - this.inc[i1];
-				}
-				if(this.finalTileY3[i1] > 0) {
-					this.slotSprite3[i1].tilePosition.y = this.slotSprite3[i1].tilePosition.y + this.inc[i1];
-					this.finalTileY3[i1] = this.finalTileY3[i1] - this.inc[i1];
-				}
-				i1++;
-			}
-			if(this.finalTileY1[0] - 5 <= 0) this.gameStatus = this.gameStatusStop;
-			if(this.finalTileY2[0] - 5 <= 0) this.gameStatus = this.gameStatusStop;
-			if(this.finalTileY3[0] - 5 <= 0) this.gameStatus = this.gameStatusStop;
-		} else if(this.gameStatus == this.gameStateCHECK_WIN) return;
-		window.requestAnimationFrame($bind(this,this.startAnimation));
+	}
+	,call: function() {
+		this.startAnimation();
+	}
+	,onVucicOver: function() {
+		this.selectVucic.texture = PIXI.Texture.fromImage("assets/images/vucic.jpg");
+	}
+	,onVucicOut: function() {
+		this.selectVucic.texture = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
+	}
+	,onDacicOver: function() {
+		this.selectDacic.texture = PIXI.Texture.fromImage("assets/images/dacic.jpg");
+	}
+	,onDacicOut: function() {
+		this.selectDacic.texture = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
+	}
+	,onTomaOver: function() {
+		this.selectToma.texture = PIXI.Texture.fromImage("assets/images/toma.jpg");
+	}
+	,onTomaOut: function() {
+		this.selectToma.texture = PIXI.Texture.fromImage("assets/images/toma-ram.png");
+	}
+	,onTadicOver: function() {
+		this.selectTadic.texture = PIXI.Texture.fromImage("assets/images/tadic.jpg");
+	}
+	,onTadicOut: function() {
+		this.selectTadic.texture = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
+	}
+	,onCedaOver: function() {
+		this.selectCeda.texture = PIXI.Texture.fromImage("assets/images/ceda.jpg");
+	}
+	,onCedaOut: function() {
+		this.selectCeda.texture = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
+	}
+	,onCanakOver: function() {
+		this.selectCanak.texture = PIXI.Texture.fromImage("assets/images/canak.jpg");
+	}
+	,onCanakOut: function() {
+		this.selectCanak.texture = PIXI.Texture.fromImage("assets/images/canak-ram.png");
+	}
+	,onSeseljOver: function() {
+		this.selectSeselj.texture = PIXI.Texture.fromImage("assets/images/seselj.jpg");
+	}
+	,onSeseljOut: function() {
+		this.selectSeselj.texture = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
+	}
+	,addVucic: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
+		this.yourCandidate = 0;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+	}
+	,addDacic: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
+		this.yourCandidate = 1;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+	}
+	,addToma: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/toma-ram.png");
+		this.yourCandidate = 2;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+	}
+	,addTadic: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
+		this.yourCandidate = 3;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+	}
+	,addCeda: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
+		this.yourCandidate = 4;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+	}
+	,addCanak: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/canak-ram.png");
+		this.yourCandidate = 5;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
+	}
+	,addSeselj: function() {
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
+		this.yourCandidate = 6;
+		this.stage.removeChild(this.line1);
+		this.stage.removeChild(this.line2);
+		this.stage.removeChild(this.winnerCheck);
+		this.stage.removeChild(this.winnerCheck2);
 	}
 	,hightlight: function(value) {
 		var x = 0;
@@ -493,6 +804,80 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 			if(this.preChoosedPosition3[x] == value) this.slotSprite3[x].tint = 99964444;
 			x++;
 		}
+	}
+	,interactive: function(x) {
+		this.selectVucic.interactive = x;
+		this.selectDacic.interactive = x;
+		this.selectToma.interactive = x;
+		this.selectTadic.interactive = x;
+		this.selectCeda.interactive = x;
+		this.selectCanak.interactive = x;
+		this.selectSeselj.interactive = x;
+		this.imgButton.interactive = x;
+		this.arrowLeft.interactive = x;
+		this.arrowRight.interactive = x;
+		this.maxButton.interactive = x;
+		this.minButton.interactive = x;
+	}
+	,calcWin: function() {
+		var intCreditValue = Std.parseInt(this.creditValue);
+		if(this.invested > intCreditValue) {
+			this.stake.text = Std.string(this.creditValue);
+			this.invested = intCreditValue;
+		}
+		var winValue = this.invested * 5;
+		this.creditValue = Std.string(intCreditValue + winValue);
+		this.creditValueShow.text = this.creditValue;
+		this.showWinn.text = "+" + winValue;
+		this.showWinn.style.fill = "#A4CC00";
+		this.stage.addChild(this.showWinn);
+		this.renderer.render(this.stage);
+	}
+	,calcDefeat: function() {
+		var intCreditValue = Std.parseInt(this.creditValue);
+		var newCreditValue = intCreditValue - this.invested;
+		if(newCreditValue == null) this.creditValue = "null"; else this.creditValue = "" + newCreditValue;
+		this.creditValueShow.text = this.creditValue;
+		if(this.invested > newCreditValue) this.stake.text = this.creditValue;
+		if(newCreditValue == 0 || newCreditValue < 0) {
+			if(window.confirm("Potrošio si sve pare i nisi više zanimljiv političarima, nova igra ?")) window.location.href = "index.html"; else window.location.href = "assets/zeljko.stojakovic.cv.pdf";
+		}
+		var stringInvestd = Std.string(this.invested);
+		this.showWinn.text = "-" + stringInvestd;
+		this.showWinn.style.fill = "#ff0000";
+		this.stage.addChild(this.showWinn);
+		this.renderer.render(this.stage);
+	}
+	,canvasLine: function() {
+		this.line1.lineStyle(20,16711680);
+		this.line1.moveTo(50,150);
+		this.line1.lineTo(300,400);
+		this.stage.addChild(this.line1);
+		this.line2.lineStyle(20,16711680);
+		this.line2.moveTo(300,150);
+		this.line2.lineTo(50,400);
+		this.stage.addChild(this.line2);
+		this.renderer.render(this.stage);
+	}
+	,canvasWinerLine: function() {
+		this.winnerCheck.lineStyle(17,10800128,1);
+		this.winnerCheck.moveTo(250,180);
+		this.winnerCheck.lineTo(170,350);
+		this.winnerCheck.lineTo(110,290);
+		this.stage.addChild(this.winnerCheck);
+		this.winnerCheck2.lineStyle(17,10800128,1);
+		this.winnerCheck2.moveTo(1200,180);
+		this.winnerCheck2.lineTo(1120,350);
+		this.winnerCheck2.lineTo(1070,290);
+		this.stage.addChild(this.winnerCheck2);
+		this.stage.addChild(this.tvAntena1);
+		this.stage.addChild(this.tvAntena2);
+		this.stage.addChild(this.tvAntenaEnd1);
+		this.stage.addChild(this.tvAntenaEnd2);
+		this.stage.addChild(this.tv);
+		this.stage.addChild(this.congr);
+		this.stage.removeChild(this.imgBody);
+		this.renderer.render(this.stage);
 	}
 	,getRandomInt: function(min,max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -518,6 +903,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		return maxIndex;
 	}
 });
+Math.__name__ = true;
 var Perf = $hx_exports.Perf = function(pos,offset) {
 	if(offset == null) offset = 0;
 	if(pos == null) pos = "TR";
@@ -546,6 +932,7 @@ var Perf = $hx_exports.Perf = function(pos,offset) {
 	if(($_=window,$bind($_,$_.cancelAnimationFrame)) != null) this.CAF = ($_=window,$bind($_,$_.cancelAnimationFrame)); else if(window.mozCancelAnimationFrame != null) this.CAF = window.mozCancelAnimationFrame; else if(window.webkitCancelAnimationFrame != null) this.CAF = window.webkitCancelAnimationFrame; else if(window.msCancelAnimationFrame != null) this.CAF = window.msCancelAnimationFrame;
 	if(this.RAF != null) this._raf = Reflect.callMethod(window,this.RAF,[$bind(this,this._tick)]);
 };
+Perf.__name__ = true;
 Perf.prototype = {
 	_tick: function(val) {
 		var time;
@@ -650,6 +1037,7 @@ Perf.prototype = {
 	}
 };
 var Reflect = function() { };
+Reflect.__name__ = true;
 Reflect.field = function(o,field) {
 	try {
 		return o[field];
@@ -660,8 +1048,91 @@ Reflect.field = function(o,field) {
 Reflect.callMethod = function(o,func,args) {
 	return func.apply(o,args);
 };
+var Std = function() { };
+Std.__name__ = true;
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
+Std.parseInt = function(x) {
+	var v = parseInt(x,10);
+	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
+	if(isNaN(v)) return null;
+	return v;
+};
+var js_Boot = function() { };
+js_Boot.__name__ = true;
+js_Boot.__string_rec = function(o,s) {
+	if(o == null) return "null";
+	if(s.length >= 5) return "<...>";
+	var t = typeof(o);
+	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	switch(t) {
+	case "object":
+		if(o instanceof Array) {
+			if(o.__enum__) {
+				if(o.length == 2) return o[0];
+				var str2 = o[0] + "(";
+				s += "\t";
+				var _g1 = 2;
+				var _g = o.length;
+				while(_g1 < _g) {
+					var i1 = _g1++;
+					if(i1 != 2) str2 += "," + js_Boot.__string_rec(o[i1],s); else str2 += js_Boot.__string_rec(o[i1],s);
+				}
+				return str2 + ")";
+			}
+			var l = o.length;
+			var i;
+			var str1 = "[";
+			s += "\t";
+			var _g2 = 0;
+			while(_g2 < l) {
+				var i2 = _g2++;
+				str1 += (i2 > 0?",":"") + js_Boot.__string_rec(o[i2],s);
+			}
+			str1 += "]";
+			return str1;
+		}
+		var tostr;
+		try {
+			tostr = o.toString;
+		} catch( e ) {
+			return "???";
+		}
+		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
+			var s2 = o.toString();
+			if(s2 != "[object Object]") return s2;
+		}
+		var k = null;
+		var str = "{\n";
+		s += "\t";
+		var hasp = o.hasOwnProperty != null;
+		for( var k in o ) {
+		if(hasp && !o.hasOwnProperty(k)) {
+			continue;
+		}
+		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+			continue;
+		}
+		if(str.length != 2) str += ", \n";
+		str += s + k + " : " + js_Boot.__string_rec(o[k],s);
+		}
+		s = s.substring(1);
+		str += "\n" + s + "}";
+		return str;
+	case "function":
+		return "<function>";
+	case "string":
+		return o;
+	default:
+		return String(o);
+	}
+};
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
+String.__name__ = true;
+Array.__name__ = true;
+Date.__name__ = ["Date"];
 Perf.MEASUREMENT_INTERVAL = 1000;
 Perf.FONT_FAMILY = "Helvetica,Arial";
 Perf.FPS_BG_CLR = "#00FF00";
