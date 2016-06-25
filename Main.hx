@@ -1,4 +1,3 @@
-import pixi.interaction.EventTarget;
 import pixi.core.sprites.Sprite;
 import pixi.core.display.Container;
 import pixi.core.textures.Texture;
@@ -7,11 +6,12 @@ import pixi.plugins.app.Application;
 import pixi.extras.TilingSprite;
 import pixi.core.graphics.Graphics;
 import pixi.core.display.DisplayObject;
+import pixi.core.display.Container;
 import js.Browser;
 import pixi.interaction.EventTarget;
+import custom.Config;
 
 class Main extends Application {
-    var _fps = 30;
 	var texture1:Texture;
 	var gameStateZERO           = 0;
     var gameStateINIT           = 1;
@@ -27,8 +27,8 @@ class Main extends Application {
     var selectCandidateInitalX  = 380;
     var selectCandidateHight    = 70;
     var selectCandidateWidth    = 70;
-    var volume                  = 1;
-    var creditValue             = "5000";
+    var volume                  = true;
+    var creditValue             = Config.creditValue;
     var result                  = [];
     var gameStatus              = 0;
     var finalTileY1             = [];
@@ -57,48 +57,50 @@ class Main extends Application {
     var count                   = 0;
     var i = 0;
     var inc = [25, 35, 50, 70, 100];
-    var imgSlot             = "assets/images/slot3.png";
-    var imgSlot3            = "assets/images/slot3.png";    
-    var imgSlot2            = "assets/images/slot3.png";
-    var textureVucicFrame   = Texture.fromImage("assets/images/vucic-ram.png");
-    var textureDacicFrame   = Texture.fromImage("assets/images/dacic-ram.png");
-    var textureTomaFrame    = Texture.fromImage("assets/images/toma-ram.png");
-    var textureTadicFrame   = Texture.fromImage("assets/images/tadic-ram.png");
-    var textureCedaFrame    = Texture.fromImage("assets/images/ceda-ram.png");
-    var textureCanakFrame   = Texture.fromImage("assets/images/canak-ram.png");
-    var textureSeseljFrame  = Texture.fromImage("assets/images/seselj-ram.png");
-    var winnerCandidateImg  = new Sprite(Texture.fromImage("assets/images/vucic-ram.png"));
-    var selectVucic     = new Sprite(Texture.fromImage("assets/images/vucic-ram.png"));
-    var selectDacic     = new Sprite(Texture.fromImage("assets/images/dacic-ram.png"));
-    var selectToma     = new Sprite(Texture.fromImage("assets/images/toma-ram.png"));
-    var selectTadic     = new Sprite(Texture.fromImage("assets/images/tadic-ram.png"));
-    var selectCeda     = new Sprite(Texture.fromImage("assets/images/ceda-ram.png"));
-    var selectCanak     = new Sprite(Texture.fromImage("assets/images/canak-ram.png"));
-    var selectSeselj     = new Sprite(Texture.fromImage("assets/images/seselj-ram.png"));
-    var yourCandidateImg        = new Sprite(Texture.fromImage("assets/images/vucic-ram.png"));
-    var imgButton           = new Sprite(Texture.fromImage("assets/images/start.png"));
-    var imgBody     = new Sprite(Texture.fromImage("assets/images/ram2.png"));
-    var line1           = new Graphics();
-    var line2           = new Graphics();
-    var winnerCheck     = new Graphics();
-    var winnerCheck2    = new Graphics();
-    var arrowRight      = new Graphics();
-    var arrowLeft       = new Graphics();
+    var imgSlot             = Config.imgSlot;
+    var imgSlot3            = Config.imgSlot;    
+    var imgSlot2            = Config.imgSlot;
+    var textureVucicFrame   = Texture.fromImage(Config.selectVucicFrame);
+    var textureDacicFrame   = Texture.fromImage(Config.selectDacicFrame);
+    var textureTomaFrame    = Texture.fromImage(Config.selectTomaFrame);
+    var textureTadicFrame   = Texture.fromImage(Config.selectTadicFrame);
+    var textureCedaFrame    = Texture.fromImage(Config.selectCedaFrame);
+    var textureCanakFrame   = Texture.fromImage(Config.selectCanakFrame);
+    var textureSeseljFrame  = Texture.fromImage(Config.selectSeseljFrame);
+    var winnerCandidateImg  = new Sprite(Texture.fromImage(Config.selectVucicFrame));
+    var selectVucic         = new Sprite(Texture.fromImage(Config.selectVucicFrame));
+    var selectDacic         = new Sprite(Texture.fromImage(Config.selectDacicFrame));
+    var selectToma          = new Sprite(Texture.fromImage(Config.selectTomaFrame));
+    var selectTadic         = new Sprite(Texture.fromImage(Config.selectTadicFrame));
+    var selectCeda          = new Sprite(Texture.fromImage(Config.selectCedaFrame));
+    var selectCanak         = new Sprite(Texture.fromImage(Config.selectCanakFrame));
+    var selectSeselj        = new Sprite(Texture.fromImage(Config.selectSeseljFrame));
+    var yourCandidateImg    = new Sprite(Texture.fromImage(Config.selectVucicFrame));
+    var imgButton           = new Sprite(Texture.fromImage(Config.imgButton));
+    var imgBody             = new Sprite(Texture.fromImage(Config.imgBody));
+    var line1               = new Graphics();
+    var line2               = new Graphics();
+    var winnerCheck         = new Graphics();
+    var winnerCheck2        = new Graphics();
+    var arrowRight          = new Graphics();
+    var arrowLeft           = new Graphics();
     var volumeOnOF          = new Text('Isključi zvuk',{ font: '20px Arial',fill: '#ff0000',align: 'center'});
-    var message = new Text('dobrodošli', {font: 'bold 15px Arial',fill: '#ff0000',align: 'center'});
+    var message             = new Text('dobrodošli', {font: 'bold 15px Arial',fill: '#ff0000',align: 'center'});
     var maxButton           = new Text('MAX', { font: '20px Arial',fill: '#ff0000',align: 'center'});
-    var minButton  = new Text('MIN', { font: '20px Arial',fill: '#ff0000',align: 'center'});
-    var credit  = new Text('CREDIT:',{font: 'bold 18px Arial'} );
-    var creditValueShow = new Text("5000",{font: 'bold 18px Arial'});
-    var stake       = new Text("100", {font: 'bold 18px Arial'});
-    var tv = new Graphics();
-    var tvAntena1 = new Graphics();
-    var tvAntena2 = new Graphics();
-    var tvAntenaEnd1 = new Graphics();
-    var tvAntenaEnd2 = new Graphics();
-    var congr = new Text('Prekidamo politički program\n zbog ekskluzivnih  vesti!\n Nepoznati kladioničar\n osvojio brdo keša!', {font: 'bold 30px Arial',align: 'center',fill: '#A4CC00'});
-    var showWinn    = new Text('0', {font: 'bold 12px Arial',align: 'center',fill: '#A4CC00'});
-    var test = 0;
+    var minButton           = new Text('MIN', { font: '20px Arial',fill: '#ff0000',align: 'center'});
+    var credit              = new Text('CREDIT:',{font: 'bold 18px Arial'} );
+    var creditValueShow     = new Text("5000",{font: 'bold 18px Arial'});
+    var stake               = new Text("100", {font: 'bold 18px Arial'});
+    var tv                  = new Graphics();
+    var tvAntena1           = new Graphics();
+    var tvAntena2           = new Graphics();
+    var tvAntenaEnd1        = new Graphics();
+    var tvAntenaEnd2        = new Graphics();
+    var congr               = new Text(Config.winnerMessage2, {font: 'bold 30px Arial',align: 'center',fill: '#A4CC00'});
+    var showWinn            = new Text('0', {font: 'bold 12px Arial',align: 'center',fill: '#A4CC00'});
+    var test                = 0;
+
+    
 
 
 	public function new() {
@@ -109,24 +111,10 @@ class Main extends Application {
 	function _init() {
 		backgroundColor = 0xffffff;
 		super.start();
-	    var texture1            = Texture.fromImage("assets/images/ram2.png");
-	    var texture2            = Texture.fromImage("assets/images/start.png");
-	    var texture4            = Texture.fromImage("assets/images/start-down.png");
-	    var texture5            = Texture.fromImage("assets/images/start-hover.png");
-	    var textureVucic        = Texture.fromImage("assets/images/vucic.jpg");
-	    var textureDacic        = Texture.fromImage("assets/images/dacic.jpg");
-	    var textureToma         = Texture.fromImage("assets/images/toma.jpg");
-	    var textureTadic        = Texture.fromImage("assets/images/tadic.jpg");
-	    var textureCeda         = Texture.fromImage("assets/images/ceda.jpg");
-	    var textureCanak        = Texture.fromImage("assets/images/canak.jpg");
-	    var textureSeselj       = Texture.fromImage("assets/images/seselj.jpg");
+	   
 		var texture3 = Texture.fromImage(imgSlot);
         var creditStyle = {font: 'bold 18px Arial'};
         var volumeStyle = { font: '20px Arial',fill: '#ff0000',align: 'center'};
-
-
-
-
 	
     selectVucic.height  = selectCandidateHight;
     selectVucic.width   = selectCandidateWidth;
@@ -136,16 +124,11 @@ class Main extends Application {
     stage.addChild(selectVucic);
     selectVucic.interactive = true;
 
-    selectVucic
-        .on('mouseover', onVucicOver);
-    selectVucic
-    .on('mouseout',onVucicOut);
-    selectVucic
-    .on('click', addVucic);
-    //     .on('touchstart', addVucic)
-    //     .on('mouseout', onVucicUp)
-    //     .on('touchend', onVucicUp);
-
+    selectVucic.on('mouseover', onVucicOver);
+    selectVucic.on('mouseout',onVucicOut);
+    selectVucic.on('click', addVucic);
+    selectVucic.on('touchstart', addVucic);
+  
     
     selectDacic.height  = selectCandidateHight;
     selectDacic.width   = selectCandidateWidth;
@@ -154,17 +137,11 @@ class Main extends Application {
 
     stage.addChild(selectDacic);
     selectDacic.interactive = true;
-    selectDacic
-        .on('mouseover', onDacicOver);
-    selectDacic
-    .on('mouseout',onDacicOut);
-      selectDacic
-    .on('click', addDacic);
+    selectDacic.on('mouseover', onDacicOver);
+    selectDacic.on('mouseout',onDacicOut);
+    selectDacic.on('click', addDacic);
+    selectDacic.on('touchstart', addDacic);
 
-    //     .on('touchstart', addDacic)
-    //     .on('click', addDacic)
-    //     .on('mouseout', onDacicUp)
-    //     .on('touchend', onDacicUp);
 
     selectToma.height   = selectCandidateHight;
     selectToma.width    = selectCandidateWidth;
@@ -173,18 +150,11 @@ class Main extends Application {
 
     stage.addChild(selectToma);
     selectToma.interactive = true;
-    selectToma
-    .on('mouseover', onTomaOver);
-    selectToma
-    .on('mouseout',onTomaOut);
-     selectToma
-    .on('click', addToma);
-
-    // selectToma
-    //     .on('click', addToma)
-    //     .on('touchstart', addToma)
-    //     .on('mouseout', onTomaUp)
-    //     .on('touchend', onTomaUp);
+    selectToma.on('mouseover', onTomaOver);
+    selectToma.on('mouseout',onTomaOut);
+    selectToma.on('click', addToma);
+    selectToma.on('touchstart', addToma);
+   
 
     selectTadic.height  = selectCandidateHight;
     selectTadic.width   = selectCandidateWidth;
@@ -193,18 +163,11 @@ class Main extends Application {
 
     stage.addChild(selectTadic);
     selectTadic.interactive = true;
-    selectTadic
-    .on('mouseover', onTadicOver);
-    selectTadic
-    .on('mouseout',onTadicOut);
-     selectTadic
-    .on('click', addTadic);
-
-    //     .on('mouseover', onTadicDown)
-    //     .on('touchstart', addTadic)
-    //     .on('click', addTadic)
-    //     .on('mouseout', onTadicUp)
-    //     .on('touchend', onTadicUp);
+    selectTadic.on('mouseover', onTadicOver);
+    selectTadic.on('mouseout',onTadicOut);
+    selectTadic.on('click', addTadic);
+    selectTadic.on('touchstart', addTadic);
+   
 
     
     selectCeda.height   = selectCandidateHight;
@@ -214,18 +177,11 @@ class Main extends Application {
 
     stage.addChild(selectCeda);
     selectCeda.interactive = true;
-    selectCeda
-    .on('mouseover', onCedaOver);
-    selectCeda
-    .on('mouseout',onCedaOut);
-     selectCeda
-    .on('click', addCeda);
-
-    //     .on('mouseover', onCedaDown)
-    //     .on('touchstart', addCeda)
-    //     .on('click', addCeda)
-    //     .on('mouseout', onCedaUp)
-    //     .on('touchend', onCedaUp);
+    selectCeda.on('mouseover', onCedaOver);
+    selectCeda.on('mouseout',onCedaOut);
+    selectCeda.on('click', addCeda);
+    selectCeda.on('touchstart', addCeda);
+   
 
     selectCanak.height  = selectCandidateHight;
     selectCanak.width   = selectCandidateWidth;
@@ -234,18 +190,11 @@ class Main extends Application {
 
     stage.addChild(selectCanak);
     selectCanak.interactive = true;
-    selectCanak
-    .on('mouseover', onCanakOver);
-    selectCanak
-    .on('mouseout',onCanakOut);
-     selectCanak
-    .on('click', addCanak);
+    selectCanak.on('mouseover', onCanakOver);
+    selectCanak.on('mouseout',onCanakOut);
+    selectCanak.on('click', addCanak);
+    selectCanak.on('touchstart', addCanak);
 
-    //     .on('mouseover', onCanakDown)
-    //     .on('touchstart', addCanak)
-    //     .on('click', addCanak)
-    //     .on('mouseout', onCanakUp)
-    //     .on('touchend', onCanakUp);
 
     selectSeselj.height = selectCandidateHight;
     selectSeselj.width  = selectCandidateWidth;
@@ -254,18 +203,11 @@ class Main extends Application {
 
     stage.addChild(selectSeselj);
     selectSeselj.interactive = true;
-    selectSeselj
-    .on('mouseover', onSeseljOver);
-    selectSeselj
-    .on('mouseout',onSeseljOut);
-     selectSeselj
-    .on('click', addSeselj);
+    selectSeselj.on('mouseover', onSeseljOver);
+    selectSeselj.on('mouseout',onSeseljOut);
+    selectSeselj.on('click', addSeselj);
+    selectSeselj.on('touchstart', addSeselj);
 
-    //     .on('mouseover', onSeseljDown)
-    //     .on('touchstart', addSeselj)
-    //     .on('click', addSeselj)
-    //     .on('mouseout', onSeseljUp)
-    //     .on('touchend', onSeseljUp);
 
     
     yourCandidateImg.height = 250;
@@ -290,13 +232,10 @@ class Main extends Application {
 
     stage.addChild(volumeOnOF);
 
-    // 
-    //     .on('touchstart', volumeClick)
-    //     .on('click', volumeClick)
-    volumeOnOF
-        .on('mouseover', volumeOnOFHover);
-    volumeOnOF
-        .on('mouseout', volumeOnOFHoverOut);
+    volumeOnOF.on('touchstart', volumeClick);
+    volumeOnOF.on('click', volumeClick);
+    volumeOnOF.on('mouseover', volumeOnOFHover);
+    volumeOnOF.on('mouseout', volumeOnOFHoverOut);
 
 
    
@@ -380,15 +319,13 @@ class Main extends Application {
     imgButton.interactive   = true;
    
 
-    imgButton
-         .on('mousedown', restart);
-    imgButton
-         .on('mousedown', call);
-        // .on('touchstart', onButtonDown)
-    //     .on('mouseup', onButtonUp)
-    //     .on('touchend', onButtonUp)
-    //     .on('mouseover', onButtonOver)
-    //     .on('mouseout', onButtonUp);
+    imgButton.on('mousedown', restart);
+    imgButton.on('mousedown', call);
+    imgButton.on('touchstart', onButtonDown);
+    imgButton.on('mouseup', onButtonUp);
+    imgButton.on('touchend', onButtonUp);
+    imgButton.on('mouseover', onButtonOver);
+    imgButton.on('mouseout', onButtonUp);
 
 
 	stage.addChild(imgBody);
@@ -431,29 +368,17 @@ class Main extends Application {
     arrowLeft.interactive   = true;
     arrowRight.interactive  = true;
 
-    arrowLeft
-        .on('mousedown', arrowLeftDown);
-    arrowLeft
-        .on('mouseup', arrowLeftUp);
-    arrowLeft
-        .on('mouseover', arrowLeftOver);
-    arrowLeft
-        .on('mouseout', arrowLeftUp);
-    //     .on('touchstart', arrowLeftClick)
-    arrowLeft
-        .on('click', arrowLeftClick);
+    arrowLeft.on('mousedown', arrowLeftDown);
+    arrowLeft.on('mouseup', arrowLeftUp);
+    arrowLeft.on('mouseover', arrowLeftOver);
+    arrowLeft.on('mouseout', arrowLeftUp);
+    arrowLeft.on('click', arrowLeftClick);
 
-    arrowRight
-        .on('mousedown', arrowRightDown);
-    arrowRight
-        .on('mouseup', arrowRightUp);
-    arrowRight
-        .on('mouseover', arrowRightOver);
-    arrowRight
-        .on('mouseout', arrowRightUp);
-        // .on('touchstart', arrowRightClick)
-    arrowRight
-        .on('click', arrowRightClick);
+    arrowRight.on('mousedown', arrowRightDown);
+    arrowRight.on('mouseup', arrowRightUp);
+    arrowRight.on('mouseover', arrowRightOver);
+    arrowRight.on('mouseout', arrowRightUp);
+    arrowRight.on('click', arrowRightClick);
 
     
     minButton.x             = 470;
@@ -462,15 +387,10 @@ class Main extends Application {
     stage.addChild(minButton);
 
    
-    //     
-     minButton
-        .on('mouseover', minHover);
-     minButton
-        .on('mouseout', minHoverOut);
-    minButton
-        .on('touchstart', min);
-    minButton
-        .on('click', min);
+    minButton.on('mouseover', minHover);
+    minButton.on('mouseout', minHoverOut);
+    minButton.on('touchstart', min);
+    minButton.on('click', min);
 
   
     maxButton.x             = 797;
@@ -478,22 +398,13 @@ class Main extends Application {
     maxButton.interactive   = true;
     stage.addChild(maxButton);
 
-    // maxButton
+  
 
-     maxButton
-        .on('mouseover', maxHover);
-     maxButton
-        .on('mouseout', maxHoverOut);
-    //     .on('touchstart', max)
-    maxButton
-        .on('click', max);
-    maxButton
-        .on('touchstart', max);
-    //     .on('mouseover', mHover)
-    //     .on('mouseout', mHoverOut)
-
-    
-
+    maxButton.on('mouseover', maxHover);
+    maxButton.on('mouseout', maxHoverOut);
+    maxButton.on('click', max);
+    maxButton.on('touchstart', max);
+ 
     tv.beginFill(0xff66cc);
     tv.lineStyle(17, 0x00000, 1);
     tv.moveTo(390, 100);
@@ -783,7 +694,7 @@ class Main extends Application {
                                 interactive(true);
                                 if (yourCandidate == 0) {
 
-                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
                                     calcWin();
@@ -791,7 +702,7 @@ class Main extends Application {
 
                                 } else {
                                     hightlight(0);
-                                //     textUpadete(config.vucicMessage, 443, 45);
+                                    textUpadete(Config.vucicMessage, 443, 45);
                                 //     playSound('assets/sounds/vucic/tisina.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -804,7 +715,7 @@ class Main extends Application {
                                 interactive(true);
 
                                 if (yourCandidate == 1) {
-                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
                                     calcWin();
@@ -812,7 +723,7 @@ class Main extends Application {
 
                                 } else {
                                     hightlight(1);
-                                //     textUpadete(config.dacicMessage, 483, 45);
+                                    textUpadete(Config.dacicMessage, 483, 45);
                                 //     playSound('assets/sounds/dacic/miljacka2.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -824,14 +735,14 @@ class Main extends Application {
                                 interactive(true);
 
                                 if (yourCandidate == 2) {
-                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(2);
-                                //     textUpadete(config.tomaMessage, 432, 45);
+                                    textUpadete(Config.tomaMessage, 432, 45);
                                 //     playSound('assets/sounds/toma/engleski.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -843,14 +754,14 @@ class Main extends Application {
                                 interactive(true);
 
                                 if (yourCandidate == 3) {
-                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(3);
-                                //     textUpadete(config.tadicMessage, 470, 45);
+                                    textUpadete(Config.tadicMessage, 470, 45);
                                 //     playSound('assets/sounds/tadic/mac.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -862,14 +773,14 @@ class Main extends Application {
                                 interactive(true);
 
                                 if (yourCandidate == 4) {
-                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(4);
-                                //     textUpadete(config.cedaMessage, 469, 45);
+                                    textUpadete(Config.cedaMessage, 469, 45);
                                 //     playSound('assets/sounds/ceda/gospodjo2.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -882,14 +793,14 @@ class Main extends Application {
                                 interactive(true);
 
                                 if (yourCandidate == 5) {
-                                //     textUpadete(config.winnerMessage, 635, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 635, 45, Config.winnerColor);
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(5);
-                                //     textUpadete(config.canakMessage, 363, 45);
+                                    textUpadete(Config.canakMessage, 363, 45);
                                 //     playSound('assets/sounds/canak/sat.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -901,7 +812,7 @@ class Main extends Application {
                                 interactive(true);
 
                                 if (yourCandidate == 6) {
-                                //     textUpadete(config.winnerMessage, 625, 45, config.winnerColor);
+                                    textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
                                 //     canvasWinerLine();
                                 //     playSound('assets/sounds/win.mp3');
                                     canvasWinerLine();
@@ -909,7 +820,7 @@ class Main extends Application {
                                 //     onWinAmin()
                                 } else {
                                     hightlight(6);
-                                //     textUpadete(config.seseljMessage, 388, 45);
+                                    textUpadete(Config.seseljMessage, 388, 45);
                                 //     playSound('assets/sounds/seselj/olja.mp3');
                                     canvasLine();
                                     calcDefeat();
@@ -922,7 +833,7 @@ class Main extends Application {
                     } else {
                         restart();
                         startAnimation();
-                        // textUpadete(config.equalMessage, 500, 45);
+                        textUpadete(Config.equalMessage, 500, 45);
                         // interactive(false);
                          
                     }
@@ -940,81 +851,84 @@ class Main extends Application {
        
     }
 
-    function onButtonUp(obj, texture2) {
-        obj.isdown     = false;
-        obj.texture    = texture2;
+    function onButtonDown(){
+        imgButton.texture = Texture.fromImage(Config.imgButtonDown);
     }
 
-    function onButtonOver(obj,texture5) {
-        obj.texture = texture5;
+    function onButtonUp() {
+        imgButton .texture = Texture.fromImage(Config.imgButton);
     }
 
-    function volumeClick(volume, volumeOnOF,volValue) {
+    function onButtonOver() {
+        imgButton.texture = Texture.fromImage(Config.imgButtonHover);
+    }
+
+    function volumeClick() {
         if (volume) {
             volumeOnOF.text = 'Uključi zvuk';
-            volume          = volValue;
+            volume          = false;
         } else {
             volumeOnOF.text = 'Isključi zvuk';
-            volume          = volValue;
+            volume          = true;
         }
     }
 
     function onVucicOver() {
-        selectVucic.texture    = Texture.fromImage("assets/images/vucic.jpg");
+        selectVucic.texture    = Texture.fromImage(Config.selectVucic);
            }
 
     function onVucicOut(){
-        selectVucic.texture    = Texture.fromImage("assets/images/vucic-ram.png");
+        selectVucic.texture    = Texture.fromImage(Config.selectVucicFrame);
     }
 
     function onDacicOver() {
-        selectDacic.texture    = Texture.fromImage("assets/images/dacic.jpg");
+        selectDacic.texture    = Texture.fromImage(Config.selectDacic);
            }
 
     function onDacicOut(){
-        selectDacic.texture    = Texture.fromImage("assets/images/dacic-ram.png");
+        selectDacic.texture    = Texture.fromImage(Config.selectDacicFrame);
     }
 
     function onTomaOver() {
-        selectToma.texture    = Texture.fromImage("assets/images/toma.jpg");
+        selectToma.texture    = Texture.fromImage(Config.selectToma);
            }
 
     function onTomaOut(){
-        selectToma.texture    = Texture.fromImage("assets/images/toma-ram.png");
+        selectToma.texture    = Texture.fromImage(Config.selectTomaFrame);
     }
 
     function onTadicOver() {
-        selectTadic.texture    = Texture.fromImage("assets/images/tadic.jpg");
+        selectTadic.texture    = Texture.fromImage(Config.selectTadic);
            }
 
     function onTadicOut(){
-        selectTadic.texture    = Texture.fromImage("assets/images/tadic-ram.png");
+        selectTadic.texture    = Texture.fromImage(Config.selectTadicFrame);
     }
     function onCedaOver() {
-        selectCeda.texture    = Texture.fromImage("assets/images/ceda.jpg");
+        selectCeda.texture    = Texture.fromImage(Config.selectCeda);
            }
 
     function onCedaOut(){
-        selectCeda.texture    = Texture.fromImage("assets/images/ceda-ram.png");
+        selectCeda.texture    = Texture.fromImage(Config.selectCedaFrame);
     }
     function onCanakOver() {
-        selectCanak.texture    = Texture.fromImage("assets/images/canak.jpg");
+        selectCanak.texture    = Texture.fromImage(Config.selectCanak);
            }
 
     function onCanakOut(){
-        selectCanak.texture    = Texture.fromImage("assets/images/canak-ram.png");
+        selectCanak.texture    = Texture.fromImage(Config.selectCanakFrame);
     }
 
     function onSeseljOver() {
-        selectSeselj.texture    = Texture.fromImage("assets/images/seselj.jpg");
+        selectSeselj.texture    = Texture.fromImage(Config.selectSeselj);
            }
 
     function onSeseljOut(){
-        selectSeselj.texture    = Texture.fromImage("assets/images/seselj-ram.png");
+        selectSeselj.texture    = Texture.fromImage(Config.selectSeseljFrame);
     }
 
     function addVucic() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/vucic-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectVucicFrame);
         yourCandidate               = 0;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1023,7 +937,7 @@ class Main extends Application {
     }
 
       function addDacic() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/dacic-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectDacicFrame);
         yourCandidate               = 1;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1032,7 +946,7 @@ class Main extends Application {
     }
 
       function addToma() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/toma-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectTomaFrame);
         yourCandidate               = 2;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1041,7 +955,7 @@ class Main extends Application {
     }
 
       function addTadic() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/tadic-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectTadicFrame);
         yourCandidate               = 3;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1050,7 +964,7 @@ class Main extends Application {
     }
 
       function addCeda() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/ceda-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectCedaFrame);
         yourCandidate               = 4;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1059,7 +973,7 @@ class Main extends Application {
     }
 
       function addCanak() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/canak-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectCanakFrame);
         yourCandidate               = 5;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1068,7 +982,7 @@ class Main extends Application {
     }
 
       function addSeselj() {
-        yourCandidateImg.texture    = Texture.fromImage("assets/images/seselj-ram.png");
+        yourCandidateImg.texture    = Texture.fromImage(Config.selectSeseljFrame);
         yourCandidate               = 6;
         stage.removeChild(line1);
         stage.removeChild(line2);
@@ -1116,7 +1030,7 @@ class Main extends Application {
             stake.text  = Std.string(creditValue);
             invested    = intCreditValue;
         }
-        var winValue = invested * 5;
+        var winValue = invested * Config.winMultiplication;
         creditValue             = Std.string(intCreditValue + winValue);
         creditValueShow.text    = creditValue;
 
@@ -1195,7 +1109,7 @@ class Main extends Application {
 
     }
 
-    function textUpadete(value, x, y, color = " #ff0000",message) {
+    function textUpadete(value,x,y,color = "#ff0000" ) {
         message.text        = value;
         message.x           = x;
         message.y           = y;

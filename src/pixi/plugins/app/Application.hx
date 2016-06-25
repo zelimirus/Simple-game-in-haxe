@@ -250,8 +250,8 @@ class Application {
 	}
 
 	public function addStats() {
-		if (untyped __js__("window").Perf != null) {
-			new Perf().addInfo(["UNKNOWN", "WEBGL", "CANVAS"][renderer.type] + " - " + pixelRatio);
-		}
+		// if (untyped __js__("window").Perf != null) {
+		// 	new Perf().addInfo(["UNKNOWN", "WEBGL", "CANVAS"][renderer.type] + " - " + pixelRatio);
+		// }
 	}
 }

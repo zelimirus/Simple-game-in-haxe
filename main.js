@@ -1,4 +1,4 @@
-(function (console, $hx_exports) { "use strict";
+(function (console) { "use strict";
 function $extend(from, fields) {
 	function Inherit() {} Inherit.prototype = from; var proto = new Inherit();
 	for (var name in fields) proto[name] = fields[name];
@@ -90,13 +90,12 @@ pixi_plugins_app_Application.prototype = {
 		this._animationFrameId = window.requestAnimationFrame($bind(this,this._onRequestAnimationFrame));
 	}
 	,addStats: function() {
-		if(window.Perf != null) new Perf().addInfo(["UNKNOWN","WEBGL","CANVAS"][this.renderer.type] + " - " + this.pixelRatio);
 	}
 };
 var Main = function() {
 	this.test = 0;
 	this.showWinn = new PIXI.Text("0",{ font : "bold 12px Arial", align : "center", fill : "#A4CC00"});
-	this.congr = new PIXI.Text("Prekidamo politički program\n zbog ekskluzivnih  vesti!\n Nepoznati kladioničar\n osvojio brdo keša!",{ font : "bold 30px Arial", align : "center", fill : "#A4CC00"});
+	this.congr = new PIXI.Text(custom_Config.winnerMessage2,{ font : "bold 30px Arial", align : "center", fill : "#A4CC00"});
 	this.tvAntenaEnd2 = new PIXI.Graphics();
 	this.tvAntenaEnd1 = new PIXI.Graphics();
 	this.tvAntena2 = new PIXI.Graphics();
@@ -115,25 +114,25 @@ var Main = function() {
 	this.winnerCheck = new PIXI.Graphics();
 	this.line2 = new PIXI.Graphics();
 	this.line1 = new PIXI.Graphics();
-	this.imgBody = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/ram2.png"));
-	this.imgButton = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/start.png"));
-	this.yourCandidateImg = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/vucic-ram.png"));
-	this.selectSeselj = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/seselj-ram.png"));
-	this.selectCanak = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/canak-ram.png"));
-	this.selectCeda = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/ceda-ram.png"));
-	this.selectTadic = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/tadic-ram.png"));
-	this.selectToma = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/toma-ram.png"));
-	this.selectDacic = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/dacic-ram.png"));
-	this.selectVucic = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/vucic-ram.png"));
-	this.winnerCandidateImg = new PIXI.Sprite(PIXI.Texture.fromImage("assets/images/vucic-ram.png"));
-	this.textureSeseljFrame = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
-	this.textureCanakFrame = PIXI.Texture.fromImage("assets/images/canak-ram.png");
-	this.textureCedaFrame = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
-	this.textureTadicFrame = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
-	this.textureTomaFrame = PIXI.Texture.fromImage("assets/images/toma-ram.png");
-	this.textureDacicFrame = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
-	this.textureVucicFrame = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
-	this.imgSlot = "assets/images/slot3.png";
+	this.imgBody = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.imgBody));
+	this.imgButton = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.imgButton));
+	this.yourCandidateImg = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectVucicFrame));
+	this.selectSeselj = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectSeseljFrame));
+	this.selectCanak = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectCanakFrame));
+	this.selectCeda = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectCedaFrame));
+	this.selectTadic = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectTadicFrame));
+	this.selectToma = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectTomaFrame));
+	this.selectDacic = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectDacicFrame));
+	this.selectVucic = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectVucicFrame));
+	this.winnerCandidateImg = new PIXI.Sprite(PIXI.Texture.fromImage(custom_Config.selectVucicFrame));
+	this.textureSeseljFrame = PIXI.Texture.fromImage(custom_Config.selectSeseljFrame);
+	this.textureCanakFrame = PIXI.Texture.fromImage(custom_Config.selectCanakFrame);
+	this.textureCedaFrame = PIXI.Texture.fromImage(custom_Config.selectCedaFrame);
+	this.textureTadicFrame = PIXI.Texture.fromImage(custom_Config.selectTadicFrame);
+	this.textureTomaFrame = PIXI.Texture.fromImage(custom_Config.selectTomaFrame);
+	this.textureDacicFrame = PIXI.Texture.fromImage(custom_Config.selectDacicFrame);
+	this.textureVucicFrame = PIXI.Texture.fromImage(custom_Config.selectVucicFrame);
+	this.imgSlot = custom_Config.imgSlot;
 	this.inc = [25,35,50,70,100];
 	this.i = 0;
 	this.invested = 0;
@@ -148,7 +147,8 @@ var Main = function() {
 	this.finalTileY2 = [];
 	this.finalTileY1 = [];
 	this.gameStatus = 0;
-	this.creditValue = "5000";
+	this.creditValue = custom_Config.creditValue;
+	this.volume = true;
 	this.selectCandidateWidth = 70;
 	this.selectCandidateHight = 70;
 	this.selectCandidateInitalX = 380;
@@ -175,17 +175,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 	_init: function() {
 		this.backgroundColor = 16777215;
 		pixi_plugins_app_Application.prototype.start.call(this);
-		var texture1 = PIXI.Texture.fromImage("assets/images/ram2.png");
-		var texture2 = PIXI.Texture.fromImage("assets/images/start.png");
-		var texture4 = PIXI.Texture.fromImage("assets/images/start-down.png");
-		var texture5 = PIXI.Texture.fromImage("assets/images/start-hover.png");
-		var textureVucic = PIXI.Texture.fromImage("assets/images/vucic.jpg");
-		var textureDacic = PIXI.Texture.fromImage("assets/images/dacic.jpg");
-		var textureToma = PIXI.Texture.fromImage("assets/images/toma.jpg");
-		var textureTadic = PIXI.Texture.fromImage("assets/images/tadic.jpg");
-		var textureCeda = PIXI.Texture.fromImage("assets/images/ceda.jpg");
-		var textureCanak = PIXI.Texture.fromImage("assets/images/canak.jpg");
-		var textureSeselj = PIXI.Texture.fromImage("assets/images/seselj.jpg");
 		var texture3 = PIXI.Texture.fromImage(this.imgSlot);
 		var creditStyle = { font : "bold 18px Arial"};
 		var volumeStyle_font = "20px Arial";
@@ -200,6 +189,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectVucic.on("mouseover",$bind(this,this.onVucicOver));
 		this.selectVucic.on("mouseout",$bind(this,this.onVucicOut));
 		this.selectVucic.on("click",$bind(this,this.addVucic));
+		this.selectVucic.on("touchstart",$bind(this,this.addVucic));
 		this.selectDacic.height = this.selectCandidateHight;
 		this.selectDacic.width = this.selectCandidateWidth;
 		this.selectDacic.y = this.selectCandidateInitalY;
@@ -209,6 +199,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectDacic.on("mouseover",$bind(this,this.onDacicOver));
 		this.selectDacic.on("mouseout",$bind(this,this.onDacicOut));
 		this.selectDacic.on("click",$bind(this,this.addDacic));
+		this.selectDacic.on("touchstart",$bind(this,this.addDacic));
 		this.selectToma.height = this.selectCandidateHight;
 		this.selectToma.width = this.selectCandidateWidth;
 		this.selectToma.y = this.selectCandidateInitalY;
@@ -218,6 +209,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectToma.on("mouseover",$bind(this,this.onTomaOver));
 		this.selectToma.on("mouseout",$bind(this,this.onTomaOut));
 		this.selectToma.on("click",$bind(this,this.addToma));
+		this.selectToma.on("touchstart",$bind(this,this.addToma));
 		this.selectTadic.height = this.selectCandidateHight;
 		this.selectTadic.width = this.selectCandidateWidth;
 		this.selectTadic.y = this.selectCandidateInitalY;
@@ -227,6 +219,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectTadic.on("mouseover",$bind(this,this.onTadicOver));
 		this.selectTadic.on("mouseout",$bind(this,this.onTadicOut));
 		this.selectTadic.on("click",$bind(this,this.addTadic));
+		this.selectTadic.on("touchstart",$bind(this,this.addTadic));
 		this.selectCeda.height = this.selectCandidateHight;
 		this.selectCeda.width = this.selectCandidateWidth;
 		this.selectCeda.y = this.selectCandidateInitalY;
@@ -236,6 +229,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectCeda.on("mouseover",$bind(this,this.onCedaOver));
 		this.selectCeda.on("mouseout",$bind(this,this.onCedaOut));
 		this.selectCeda.on("click",$bind(this,this.addCeda));
+		this.selectCeda.on("touchstart",$bind(this,this.addCeda));
 		this.selectCanak.height = this.selectCandidateHight;
 		this.selectCanak.width = this.selectCandidateWidth;
 		this.selectCanak.y = this.selectCandidateInitalY;
@@ -245,6 +239,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectCanak.on("mouseover",$bind(this,this.onCanakOver));
 		this.selectCanak.on("mouseout",$bind(this,this.onCanakOut));
 		this.selectCanak.on("click",$bind(this,this.addCanak));
+		this.selectCanak.on("touchstart",$bind(this,this.addCanak));
 		this.selectSeselj.height = this.selectCandidateHight;
 		this.selectSeselj.width = this.selectCandidateWidth;
 		this.selectSeselj.y = this.selectCandidateInitalY;
@@ -254,6 +249,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.selectSeselj.on("mouseover",$bind(this,this.onSeseljOver));
 		this.selectSeselj.on("mouseout",$bind(this,this.onSeseljOut));
 		this.selectSeselj.on("click",$bind(this,this.addSeselj));
+		this.selectSeselj.on("touchstart",$bind(this,this.addSeselj));
 		this.yourCandidateImg.height = 250;
 		this.yourCandidateImg.width = this.yourCandidateImg.height;
 		this.yourCandidateImg.y = 150;
@@ -268,6 +264,8 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.volumeOnOF.y = 10;
 		this.volumeOnOF.interactive = true;
 		this.stage.addChild(this.volumeOnOF);
+		this.volumeOnOF.on("touchstart",$bind(this,this.volumeClick));
+		this.volumeOnOF.on("click",$bind(this,this.volumeClick));
 		this.volumeOnOF.on("mouseover",$bind(this,this.volumeOnOFHover));
 		this.volumeOnOF.on("mouseout",$bind(this,this.volumeOnOFHoverOut));
 		this.message.x = 613;
@@ -331,6 +329,11 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.imgButton.interactive = true;
 		this.imgButton.on("mousedown",$bind(this,this.restart));
 		this.imgButton.on("mousedown",$bind(this,this.call));
+		this.imgButton.on("touchstart",$bind(this,this.onButtonDown));
+		this.imgButton.on("mouseup",$bind(this,this.onButtonUp));
+		this.imgButton.on("touchend",$bind(this,this.onButtonUp));
+		this.imgButton.on("mouseover",$bind(this,this.onButtonOver));
+		this.imgButton.on("mouseout",$bind(this,this.onButtonUp));
 		this.stage.addChild(this.imgBody);
 		this.stage.addChild(this.imgButton);
 		this.arrowLeft.beginFill(10800128);
@@ -605,10 +608,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureVucicFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 0) {
+								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(0);
+								_g.textUpadete(custom_Config.vucicMessage,443,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -617,10 +622,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureDacicFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 1) {
+								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(1);
+								_g.textUpadete(custom_Config.dacicMessage,483,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -629,10 +636,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureTomaFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 2) {
+								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(2);
+								_g.textUpadete(custom_Config.tomaMessage,432,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -641,10 +650,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureTadicFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 3) {
+								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(3);
+								_g.textUpadete(custom_Config.tadicMessage,470,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -653,10 +664,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureCedaFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 4) {
+								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(4);
+								_g.textUpadete(custom_Config.cedaMessage,469,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -665,10 +678,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureCanakFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 5) {
+								_g.textUpadete(custom_Config.winnerMessage,635,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(5);
+								_g.textUpadete(custom_Config.canakMessage,363,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -677,10 +692,12 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.winnerCandidateImg.texture = _g.textureSeseljFrame;
 							_g.interactive(true);
 							if(_g.yourCandidate == 6) {
+								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(6);
+								_g.textUpadete(custom_Config.seseljMessage,388,45);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -690,6 +707,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 					} else {
 						_g.restart();
 						_g.startAnimation();
+						_g.textUpadete(custom_Config.equalMessage,500,45);
 					}
 				},2800);
 			}
@@ -698,50 +716,68 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 	,call: function() {
 		this.startAnimation();
 	}
+	,onButtonDown: function() {
+		this.imgButton.texture = PIXI.Texture.fromImage(custom_Config.imgButtonDown);
+	}
+	,onButtonUp: function() {
+		this.imgButton.texture = PIXI.Texture.fromImage(custom_Config.imgButton);
+	}
+	,onButtonOver: function() {
+		this.imgButton.texture = PIXI.Texture.fromImage(custom_Config.imgButtonHover);
+	}
+	,volumeClick: function() {
+		if(this.volume) {
+			this.volumeOnOF.text = "Uključi zvuk";
+			this.volume = false;
+		} else {
+			this.volumeOnOF.text = "Isključi zvuk";
+			this.volume = true;
+		}
+	}
 	,onVucicOver: function() {
-		this.selectVucic.texture = PIXI.Texture.fromImage("assets/images/vucic.jpg");
+		this.selectVucic.texture = PIXI.Texture.fromImage(custom_Config.selectVucic);
 	}
 	,onVucicOut: function() {
-		this.selectVucic.texture = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
+		this.selectVucic.texture = PIXI.Texture.fromImage(custom_Config.selectVucicFrame);
 	}
 	,onDacicOver: function() {
-		this.selectDacic.texture = PIXI.Texture.fromImage("assets/images/dacic.jpg");
+		this.selectDacic.texture = PIXI.Texture.fromImage(custom_Config.selectDacic);
 	}
 	,onDacicOut: function() {
-		this.selectDacic.texture = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
+		this.selectDacic.texture = PIXI.Texture.fromImage(custom_Config.selectDacicFrame);
 	}
 	,onTomaOver: function() {
-		this.selectToma.texture = PIXI.Texture.fromImage("assets/images/toma.jpg");
+		this.selectToma.texture = PIXI.Texture.fromImage(custom_Config.selectToma);
 	}
 	,onTomaOut: function() {
-		this.selectToma.texture = PIXI.Texture.fromImage("assets/images/toma-ram.png");
+		this.selectToma.texture = PIXI.Texture.fromImage(custom_Config.selectTomaFrame);
 	}
 	,onTadicOver: function() {
-		this.selectTadic.texture = PIXI.Texture.fromImage("assets/images/tadic.jpg");
+		this.selectTadic.texture = PIXI.Texture.fromImage(custom_Config.selectTadic);
 	}
 	,onTadicOut: function() {
-		this.selectTadic.texture = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
+		this.selectTadic.texture = PIXI.Texture.fromImage(custom_Config.selectTadicFrame);
 	}
 	,onCedaOver: function() {
-		this.selectCeda.texture = PIXI.Texture.fromImage("assets/images/ceda.jpg");
+		this.selectCeda.texture = PIXI.Texture.fromImage(custom_Config.selectCeda);
 	}
 	,onCedaOut: function() {
-		this.selectCeda.texture = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
+		this.selectCeda.texture = PIXI.Texture.fromImage(custom_Config.selectCedaFrame);
 	}
 	,onCanakOver: function() {
-		this.selectCanak.texture = PIXI.Texture.fromImage("assets/images/canak.jpg");
+		this.selectCanak.texture = PIXI.Texture.fromImage(custom_Config.selectCanak);
 	}
 	,onCanakOut: function() {
-		this.selectCanak.texture = PIXI.Texture.fromImage("assets/images/canak-ram.png");
+		this.selectCanak.texture = PIXI.Texture.fromImage(custom_Config.selectCanakFrame);
 	}
 	,onSeseljOver: function() {
-		this.selectSeselj.texture = PIXI.Texture.fromImage("assets/images/seselj.jpg");
+		this.selectSeselj.texture = PIXI.Texture.fromImage(custom_Config.selectSeselj);
 	}
 	,onSeseljOut: function() {
-		this.selectSeselj.texture = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
+		this.selectSeselj.texture = PIXI.Texture.fromImage(custom_Config.selectSeseljFrame);
 	}
 	,addVucic: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/vucic-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectVucicFrame);
 		this.yourCandidate = 0;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -749,7 +785,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.winnerCheck2);
 	}
 	,addDacic: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/dacic-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectDacicFrame);
 		this.yourCandidate = 1;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -757,7 +793,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.winnerCheck2);
 	}
 	,addToma: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/toma-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectTomaFrame);
 		this.yourCandidate = 2;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -765,7 +801,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.winnerCheck2);
 	}
 	,addTadic: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/tadic-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectTadicFrame);
 		this.yourCandidate = 3;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -773,7 +809,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.winnerCheck2);
 	}
 	,addCeda: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/ceda-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectCedaFrame);
 		this.yourCandidate = 4;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -781,7 +817,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.winnerCheck2);
 	}
 	,addCanak: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/canak-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectCanakFrame);
 		this.yourCandidate = 5;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -789,7 +825,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.winnerCheck2);
 	}
 	,addSeselj: function() {
-		this.yourCandidateImg.texture = PIXI.Texture.fromImage("assets/images/seselj-ram.png");
+		this.yourCandidateImg.texture = PIXI.Texture.fromImage(custom_Config.selectSeseljFrame);
 		this.yourCandidate = 6;
 		this.stage.removeChild(this.line1);
 		this.stage.removeChild(this.line2);
@@ -825,7 +861,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 			this.stake.text = Std.string(this.creditValue);
 			this.invested = intCreditValue;
 		}
-		var winValue = this.invested * 5;
+		var winValue = this.invested * custom_Config.winMultiplication;
 		this.creditValue = Std.string(intCreditValue + winValue);
 		this.creditValueShow.text = this.creditValue;
 		this.showWinn.text = "+" + winValue;
@@ -879,6 +915,13 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.imgBody);
 		this.renderer.render(this.stage);
 	}
+	,textUpadete: function(value,x,y,color) {
+		if(color == null) color = "#ff0000";
+		this.message.text = value;
+		this.message.x = x;
+		this.message.y = y;
+		this.message.style.fill = color;
+	}
 	,getRandomInt: function(min,max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
@@ -904,150 +947,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 	}
 });
 Math.__name__ = true;
-var Perf = $hx_exports.Perf = function(pos,offset) {
-	if(offset == null) offset = 0;
-	if(pos == null) pos = "TR";
-	this._perfObj = window.performance;
-	if(Reflect.field(this._perfObj,"memory") != null) this._memoryObj = Reflect.field(this._perfObj,"memory");
-	this._memCheck = this._perfObj != null && this._memoryObj != null && this._memoryObj.totalJSHeapSize > 0;
-	this._pos = pos;
-	this._offset = offset;
-	this.currentFps = 60;
-	this.currentMs = 0;
-	this.currentMem = "0";
-	this.lowFps = 60;
-	this.avgFps = 60;
-	this._measureCount = 0;
-	this._totalFps = 0;
-	this._time = 0;
-	this._ticks = 0;
-	this._fpsMin = 60;
-	this._fpsMax = 60;
-	if(this._perfObj != null && ($_=this._perfObj,$bind($_,$_.now)) != null) this._startTime = this._perfObj.now(); else this._startTime = new Date().getTime();
-	this._prevTime = -Perf.MEASUREMENT_INTERVAL;
-	this._createFpsDom();
-	this._createMsDom();
-	if(this._memCheck) this._createMemoryDom();
-	if(($_=window,$bind($_,$_.requestAnimationFrame)) != null) this.RAF = ($_=window,$bind($_,$_.requestAnimationFrame)); else if(window.mozRequestAnimationFrame != null) this.RAF = window.mozRequestAnimationFrame; else if(window.webkitRequestAnimationFrame != null) this.RAF = window.webkitRequestAnimationFrame; else if(window.msRequestAnimationFrame != null) this.RAF = window.msRequestAnimationFrame;
-	if(($_=window,$bind($_,$_.cancelAnimationFrame)) != null) this.CAF = ($_=window,$bind($_,$_.cancelAnimationFrame)); else if(window.mozCancelAnimationFrame != null) this.CAF = window.mozCancelAnimationFrame; else if(window.webkitCancelAnimationFrame != null) this.CAF = window.webkitCancelAnimationFrame; else if(window.msCancelAnimationFrame != null) this.CAF = window.msCancelAnimationFrame;
-	if(this.RAF != null) this._raf = Reflect.callMethod(window,this.RAF,[$bind(this,this._tick)]);
-};
-Perf.__name__ = true;
-Perf.prototype = {
-	_tick: function(val) {
-		var time;
-		if(this._perfObj != null && ($_=this._perfObj,$bind($_,$_.now)) != null) time = this._perfObj.now(); else time = new Date().getTime();
-		this._ticks++;
-		if(this._raf != null && time > this._prevTime + Perf.MEASUREMENT_INTERVAL) {
-			this.currentMs = Math.round(time - this._startTime);
-			this.ms.innerHTML = "MS: " + this.currentMs;
-			this.currentFps = Math.round(this._ticks * 1000 / (time - this._prevTime));
-			if(this.currentFps > 0 && val > Perf.DELAY_TIME) {
-				this._measureCount++;
-				this._totalFps += this.currentFps;
-				this.lowFps = this._fpsMin = Math.min(this._fpsMin,this.currentFps);
-				this._fpsMax = Math.max(this._fpsMax,this.currentFps);
-				this.avgFps = Math.round(this._totalFps / this._measureCount);
-			}
-			this.fps.innerHTML = "FPS: " + this.currentFps + " (" + this._fpsMin + "-" + this._fpsMax + ")";
-			if(this.currentFps >= 30) this.fps.style.backgroundColor = Perf.FPS_BG_CLR; else if(this.currentFps >= 15) this.fps.style.backgroundColor = Perf.FPS_WARN_BG_CLR; else this.fps.style.backgroundColor = Perf.FPS_PROB_BG_CLR;
-			this._prevTime = time;
-			this._ticks = 0;
-			if(this._memCheck) {
-				this.currentMem = this._getFormattedSize(this._memoryObj.usedJSHeapSize,2);
-				this.memory.innerHTML = "MEM: " + this.currentMem;
-			}
-		}
-		this._startTime = time;
-		if(this._raf != null) this._raf = Reflect.callMethod(window,this.RAF,[$bind(this,this._tick)]);
-	}
-	,_createDiv: function(id,top) {
-		if(top == null) top = 0;
-		var div;
-		var _this = window.document;
-		div = _this.createElement("div");
-		div.id = id;
-		div.className = id;
-		div.style.position = "absolute";
-		var _g = this._pos;
-		switch(_g) {
-		case "TL":
-			div.style.left = this._offset + "px";
-			div.style.top = top + "px";
-			break;
-		case "TR":
-			div.style.right = this._offset + "px";
-			div.style.top = top + "px";
-			break;
-		case "BL":
-			div.style.left = this._offset + "px";
-			div.style.bottom = (this._memCheck?48:32) - top + "px";
-			break;
-		case "BR":
-			div.style.right = this._offset + "px";
-			div.style.bottom = (this._memCheck?48:32) - top + "px";
-			break;
-		}
-		div.style.width = "80px";
-		div.style.height = "12px";
-		div.style.lineHeight = "12px";
-		div.style.padding = "2px";
-		div.style.fontFamily = Perf.FONT_FAMILY;
-		div.style.fontSize = "9px";
-		div.style.fontWeight = "bold";
-		div.style.textAlign = "center";
-		window.document.body.appendChild(div);
-		return div;
-	}
-	,_createFpsDom: function() {
-		this.fps = this._createDiv("fps");
-		this.fps.style.backgroundColor = Perf.FPS_BG_CLR;
-		this.fps.style.zIndex = "995";
-		this.fps.style.color = Perf.FPS_TXT_CLR;
-		this.fps.innerHTML = "FPS: 0";
-	}
-	,_createMsDom: function() {
-		this.ms = this._createDiv("ms",16);
-		this.ms.style.backgroundColor = Perf.MS_BG_CLR;
-		this.ms.style.zIndex = "996";
-		this.ms.style.color = Perf.MS_TXT_CLR;
-		this.ms.innerHTML = "MS: 0";
-	}
-	,_createMemoryDom: function() {
-		this.memory = this._createDiv("memory",32);
-		this.memory.style.backgroundColor = Perf.MEM_BG_CLR;
-		this.memory.style.color = Perf.MEM_TXT_CLR;
-		this.memory.style.zIndex = "997";
-		this.memory.innerHTML = "MEM: 0";
-	}
-	,_getFormattedSize: function(bytes,frac) {
-		if(frac == null) frac = 0;
-		var sizes = ["Bytes","KB","MB","GB","TB"];
-		if(bytes == 0) return "0";
-		var precision = Math.pow(10,frac);
-		var i = Math.floor(Math.log(bytes) / Math.log(1024));
-		return Math.round(bytes * precision / Math.pow(1024,i)) / precision + " " + sizes[i];
-	}
-	,addInfo: function(val) {
-		this.info = this._createDiv("info",this._memCheck?48:32);
-		this.info.style.backgroundColor = Perf.INFO_BG_CLR;
-		this.info.style.color = Perf.INFO_TXT_CLR;
-		this.info.style.zIndex = "998";
-		this.info.innerHTML = val;
-	}
-};
-var Reflect = function() { };
-Reflect.__name__ = true;
-Reflect.field = function(o,field) {
-	try {
-		return o[field];
-	} catch( e ) {
-		return null;
-	}
-};
-Reflect.callMethod = function(o,func,args) {
-	return func.apply(o,args);
-};
 var Std = function() { };
 Std.__name__ = true;
 Std.string = function(s) {
@@ -1059,6 +958,8 @@ Std.parseInt = function(x) {
 	if(isNaN(v)) return null;
 	return v;
 };
+var custom_Config = function() { };
+custom_Config.__name__ = true;
 var js_Boot = function() { };
 js_Boot.__name__ = true;
 js_Boot.__string_rec = function(o,s) {
@@ -1132,21 +1033,39 @@ var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
 String.__name__ = true;
 Array.__name__ = true;
-Date.__name__ = ["Date"];
-Perf.MEASUREMENT_INTERVAL = 1000;
-Perf.FONT_FAMILY = "Helvetica,Arial";
-Perf.FPS_BG_CLR = "#00FF00";
-Perf.FPS_WARN_BG_CLR = "#FF8000";
-Perf.FPS_PROB_BG_CLR = "#FF0000";
-Perf.MS_BG_CLR = "#FFFF00";
-Perf.MEM_BG_CLR = "#086A87";
-Perf.INFO_BG_CLR = "#00FFFF";
-Perf.FPS_TXT_CLR = "#000000";
-Perf.MS_TXT_CLR = "#000000";
-Perf.MEM_TXT_CLR = "#FFFFFF";
-Perf.INFO_TXT_CLR = "#000000";
-Perf.DELAY_TIME = 4000;
+custom_Config.winMultiplication = 5;
+custom_Config.equalMessage = "Pokradene glasačke kutije, izbori se ponavlaju";
+custom_Config.winnerMessage = "Pobeda";
+custom_Config.vucicMessage = "Tisina tamo, živećeš bolje 2046ste ako ne gubiš pare kao sad!";
+custom_Config.dacicMessage = "Ko bi reko čuda da se dese da Miljacka pare ti odnese";
+custom_Config.tomaMessage = "Doći će žuti ljudi da piju vodu sa Morave i odneće ti uložene pare";
+custom_Config.tadicMessage = "Tri sekunde u reketu ministre molim te, odoše pare";
+custom_Config.cedaMessage = "Nemojte da plačete gospođo,samo ste prokockali novac";
+custom_Config.canakMessage = "Veliki brate oćeš da ti Jelena i ja odpevamo neku pesmu? Lakše ćeš preboleti novce";
+custom_Config.seseljMessage = "Vi pripadnici Haškog tribunala možete samo da prihvatite da ste izgibili pare";
+custom_Config.imgSlot = "assets/images/slot3.png";
+custom_Config.imgBody = "assets/images/frame.png";
+custom_Config.imgButton = "assets/images/start.png";
+custom_Config.imgButtonDown = "assets/images/start-down.png";
+custom_Config.imgButtonHover = "assets/images/start-hover.png";
+custom_Config.selectVucic = "assets/images/vucic.jpg";
+custom_Config.selectDacic = "assets/images/dacic.jpg";
+custom_Config.selectToma = "assets/images/toma.jpg";
+custom_Config.selectTadic = "assets/images/tadic.jpg";
+custom_Config.selectCeda = "assets/images/ceda.jpg";
+custom_Config.selectCanak = "assets/images/canak.jpg";
+custom_Config.selectSeselj = "assets/images/seselj.jpg";
+custom_Config.selectVucicFrame = "assets/images/vucic-ram.png";
+custom_Config.selectDacicFrame = "assets/images/dacic-ram.png";
+custom_Config.selectTomaFrame = "assets/images/toma-ram.png";
+custom_Config.selectTadicFrame = "assets/images/tadic-ram.png";
+custom_Config.selectCedaFrame = "assets/images/ceda-ram.png";
+custom_Config.selectCanakFrame = "assets/images/canak-ram.png";
+custom_Config.selectSeseljFrame = "assets/images/seselj-ram.png";
+custom_Config.winnerColor = "#A4CC00";
+custom_Config.creditValue = "5000";
+custom_Config.winnerMessage2 = "Prekidamo politički program\n zbog ekskluzivnih  vesti!\n Nepoznati kladioničar\n osvojio brdo keša!";
 Main.main();
-})(typeof console != "undefined" ? console : {log:function(){}}, typeof window != "undefined" ? window : exports);
+})(typeof console != "undefined" ? console : {log:function(){}});
 
 //# sourceMappingURL=main.js.map
