@@ -165,8 +165,8 @@ class Application {
 		clearBeforeRender = true;
 		preserveDrawingBuffer = false;
 		backgroundColor = 0xFFFFFF;
-		width = Browser.window.innerWidth;
-		height = Browser.window.innerHeight;
+		width = Browser.window.innerWidth - 50;
+		height = Browser.window.innerHeight - 5;
 		fps = 60;
 	}
 

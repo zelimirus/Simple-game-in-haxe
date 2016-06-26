@@ -37,8 +37,8 @@ var pixi_plugins_app_Application = function() {
 	this.clearBeforeRender = true;
 	this.preserveDrawingBuffer = false;
 	this.backgroundColor = 16777215;
-	this.width = window.innerWidth;
-	this.height = window.innerHeight;
+	this.width = window.innerWidth - 50;
+	this.height = window.innerHeight - 5;
 	this.set_fps(60);
 };
 pixi_plugins_app_Application.__name__ = true;
@@ -106,7 +106,6 @@ pixi_plugins_app_Application.prototype = {
 	}
 };
 var Main = function() {
-	this.test = 0;
 	this.mute = false;
 	this.showWinn = new PIXI.Text("0",{ font : "bold 12px Arial", align : "center", fill : "#A4CC00"});
 	this.congr = new PIXI.Text(custom_Config.winnerMessage2,{ font : "bold 30px Arial", align : "center", fill : "#A4CC00"});
@@ -120,7 +119,7 @@ var Main = function() {
 	this.credit = new PIXI.Text("CREDIT:",{ font : "bold 18px Arial"});
 	this.minButton = new PIXI.Text("MIN",{ font : "20px Arial", fill : "#ff0000", align : "center"});
 	this.maxButton = new PIXI.Text("MAX",{ font : "20px Arial", fill : "#ff0000", align : "center"});
-	this.message = new PIXI.Text("dobrodošli",{ font : "bold 15px Arial", fill : "#ff0000", align : "center"});
+	this.message = new PIXI.Text(custom_Config.welcomeMessage,{ font : "bold 15px Arial", fill : "#ff0000", align : "center"});
 	this.volumeOnOF = new PIXI.Text("Isključi zvuk",{ font : "20px Arial", fill : "#ff0000", align : "center"});
 	this.arrowLeft = new PIXI.Graphics();
 	this.arrowRight = new PIXI.Graphics();
@@ -149,6 +148,15 @@ var Main = function() {
 	this.imgSlot = custom_Config.imgSlot;
 	this.inc = [25,35,50,70,100];
 	this.i = 0;
+	this.startDolarCount = 0;
+	this.minY = 0;
+	this.maxY = 650;
+	this.minX = 0;
+	this.maxX = 1300;
+	this.gravity = 2.5;
+	this.dolar = [];
+	this.amount = 20;
+	this.isAnimated = true;
 	this.invested = 0;
 	this.yourCandidate = 0;
 	this.preChoosedPosition3 = [6,1,2,4,0];
@@ -353,7 +361,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.imgButton.width = 100;
 		this.imgButton.interactive = true;
 		this.imgButton.on("mousedown",$bind(this,this.restart));
-		this.imgButton.on("mousedown",$bind(this,this.call));
+		this.imgButton.on("mousedown",$bind(this,this.startAnimation));
 		this.imgButton.on("touchstart",$bind(this,this.onButtonDown));
 		this.imgButton.on("mouseup",$bind(this,this.onButtonUp));
 		this.imgButton.on("touchend",$bind(this,this.onButtonUp));
@@ -377,7 +385,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.arrowRight.lineTo(703,640);
 		this.arrowRight.lineTo(743,640);
 		this.arrowRight.lineTo(743,650);
-		var stakeValue = "100";
 		this.stake.y = 625;
 		this.stake.x = 640;
 		this.stage.addChild(this.arrowLeft);
@@ -520,7 +527,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.arrowLeft.tint = 6129408;
 	}
 	,restart: function() {
-		this.test = 0;
 		this.gameStatus = this.gameStateINIT;
 		this.interactive(false);
 		this.invested = Std.parseInt(this.stake.text);
@@ -536,6 +542,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.stage.removeChild(this.congr);
 		this.stage.removeChild(this.showWinn);
 		this.stage.addChild(this.imgBody);
+		this.isAnimated = true;
 	}
 	,draw: function() {
 		if(this.gameStatus == this.gameStateZERO) this.gameStatus = this.gameStateINIT; else if(this.gameStatus == this.gameStateINIT) this.gameStatus = this.gameStateCHECK_WIN; else if(this.gameStatus == this.gameStateMOVING) {
@@ -637,6 +644,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(0);
 								_g.textUpadete(custom_Config.vucicMessage,443,45);
@@ -653,6 +661,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(1);
 								_g.textUpadete(custom_Config.dacicMessage,483,45);
@@ -669,6 +678,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(2);
 								_g.textUpadete(custom_Config.tomaMessage,432,45);
@@ -685,6 +695,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(3);
 								_g.textUpadete(custom_Config.tadicMessage,470,45);
@@ -701,6 +712,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(4);
 								_g.textUpadete(custom_Config.cedaMessage,469,45);
@@ -717,6 +729,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(5);
 								_g.textUpadete(custom_Config.canakMessage,363,45);
@@ -733,6 +746,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
+								_g.onWinAmin();
 							} else {
 								_g.hightlight(6);
 								_g.textUpadete(custom_Config.seseljMessage,388,45);
@@ -751,9 +765,6 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 				},2800);
 			}
 		}
-	}
-	,call: function() {
-		this.startAnimation();
 	}
 	,playSound: function(obj,mute) {
 		obj.mute = mute;
@@ -999,6 +1010,80 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		}
 		return maxIndex;
 	}
+	,onWinAmin: function() {
+		var _g = this;
+		if(this.isAnimated) {
+			var wabbitTexture = PIXI.Texture.fromImage("assets/images/dolar2.png");
+			var count = this.startDolarCount;
+			var container = new PIXI.Container();
+			this.stage.addChild(container);
+			var money1 = new PIXI.Texture(wabbitTexture.baseTexture);
+			var money2 = new PIXI.Texture(wabbitTexture.baseTexture);
+			var money3 = new PIXI.Texture(wabbitTexture.baseTexture);
+			var money4 = new PIXI.Texture(wabbitTexture.baseTexture);
+			var money5 = new PIXI.Texture(wabbitTexture.baseTexture);
+			var moneyTextures = [money1,money2,money3,money4,money5];
+			var moneyType = 3;
+			var currentTexture = moneyTextures[moneyType];
+			var i = 0;
+			var money = new custom_Money(currentTexture);
+			while(this.startDolarCount > i) {
+				money.speedX = Math.random() * 10;
+				money.speedY = Math.random() * 10 - 5;
+				money.anchor.x = 0.5;
+				money.anchor.y = 1;
+				this.dolar.push(money);
+				i++;
+				container.addChild(money);
+			}
+			if(count < 3) {
+				var i1 = 0;
+				var money6 = new custom_Money(currentTexture);
+				while(i1 < this.amount) {
+					money6.speedX = Math.random() * 10;
+					money6.speedY = Math.random() * 10 - 5;
+					money6.anchor.y = 1;
+					this.dolar.push(money6);
+					money6.scale.set(0.5 + Math.random() * 0.5);
+					money6.rotation = Math.random() - 0.5;
+					var random = Math.floor(Math.random() * container.children.length - 2);
+					container.addChild(money6);
+					count++;
+					i1++;
+				}
+			}
+			var _g1 = 0;
+			var _g2 = this.dolar.length;
+			while(_g1 < _g2) {
+				var i2 = _g1++;
+				var money7 = this.dolar[i2];
+				money7.position.x += money7.speedX;
+				money7.position.y += money7.speedY;
+				money7.speedY += this.gravity;
+				if(money7.position.x > this.maxX) {
+					money7.speedX *= -1;
+					money7.position.x = this.maxX;
+				} else if(money7.position.x < this.minX) {
+					money7.speedX *= -1;
+					money7.position.x = this.minX;
+				}
+				if(money7.position.y > this.maxY) {
+					money7.speedY *= -0.85;
+					money7.position.y = this.maxY;
+					if(Math.random() > 0.5) money7.speedY -= Math.random() * 6;
+				} else if(money7.position.y < this.minY) {
+					money7.speedY = 0;
+					money7.position.y = this.minY;
+				}
+			}
+			if(this.isAnimated) window.requestAnimationFrame($bind(this,this.onWinAmin));
+			window.setTimeout(function() {
+				container.removeChild(money);
+				_g.stage.removeChild(container);
+				_g.isAnimated = false;
+			},1000);
+		}
+	}
 });
 Math.__name__ = true;
 var Reflect = function() { };
@@ -1132,6 +1217,13 @@ core_MultipackParser.parse = function(resource,next) {
 };
 var custom_Config = function() { };
 custom_Config.__name__ = true;
+var custom_Money = function(texture) {
+	PIXI.Sprite.call(this,texture);
+};
+custom_Money.__name__ = true;
+custom_Money.__super__ = PIXI.Sprite;
+custom_Money.prototype = $extend(PIXI.Sprite.prototype,{
+});
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = true;
 var haxe_ds_StringMap = function() {
@@ -1232,6 +1324,7 @@ var __map_reserved = {}
 custom_Config.winMultiplication = 5;
 custom_Config.equalMessage = "Pokradene glasačke kutije, izbori se ponavlaju";
 custom_Config.winnerMessage = "Pobeda";
+custom_Config.welcomeMessage = "Dobrodošli";
 custom_Config.vucicMessage = "Tisina tamo, živećeš bolje 2046ste ako ne gubiš pare kao sad!";
 custom_Config.dacicMessage = "Ko bi reko čuda da se dese da Miljacka pare ti odnese";
 custom_Config.tomaMessage = "Doći će žuti ljudi da piju vodu sa Morave i odneće ti uložene pare";
