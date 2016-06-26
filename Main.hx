@@ -1,3 +1,5 @@
+import core.AudioAsset;
+import core.AssetLoader;
 import pixi.core.sprites.Sprite;
 import pixi.core.display.Container;
 import pixi.core.textures.Texture;
@@ -9,9 +11,19 @@ import pixi.core.display.DisplayObject;
 import pixi.core.display.Container;
 import js.Browser;
 import pixi.interaction.EventTarget;
+import pixi.loaders.Loader;
 import custom.Config;
 
 class Main extends Application {
+    var loader:AssetLoader;
+    var soundWin:AudioAsset;
+    var soundVucic:AudioAsset;
+    var soundDacic:AudioAsset;
+    var soundToma:AudioAsset;
+    var soundTadic:AudioAsset;
+    var soundCeda:AudioAsset;
+    var soundCanak:AudioAsset;
+    var soundSeselj:AudioAsset;
 	var texture1:Texture;
 	var gameStateZERO           = 0;
     var gameStateINIT           = 1;
@@ -98,6 +110,7 @@ class Main extends Application {
     var tvAntenaEnd2        = new Graphics();
     var congr               = new Text(Config.winnerMessage2, {font: 'bold 30px Arial',align: 'center',fill: '#A4CC00'});
     var showWinn            = new Text('0', {font: 'bold 12px Arial',align: 'center',fill: '#A4CC00'});
+    var mute:Bool           = false;
     var test                = 0;
 
     
@@ -115,6 +128,24 @@ class Main extends Application {
 		var texture3 = Texture.fromImage(imgSlot);
         var creditStyle = {font: 'bold 18px Arial'};
         var volumeStyle = { font: '20px Arial',fill: '#ff0000',align: 'center'};
+
+        var baseURL = "assets/sounds/";
+
+        loader = new AssetLoader();
+        loader.baseUrl = baseURL;
+
+        loader.addAudioAsset("win", "win.mp3");
+        loader.addAudioAsset("vucic", "tisina.mp3");
+        loader.addAudioAsset("dacic", "miljacka2.mp3");
+        loader.addAudioAsset("toma", "engleski.mp3");
+        loader.addAudioAsset("tadic", "mac.mp3");
+        loader.addAudioAsset("ceda", "gospodjo2.mp3");
+        loader.addAudioAsset("canak", "sat.mp3");
+        loader.addAudioAsset("seselj", "seki.mp3");
+
+
+        loader.start(onLoaded);
+
 	
     selectVucic.height  = selectCandidateHight;
     selectVucic.width   = selectCandidateWidth;
@@ -695,7 +726,7 @@ class Main extends Application {
                                 if (yourCandidate == 0) {
 
                                     textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
@@ -703,7 +734,7 @@ class Main extends Application {
                                 } else {
                                     hightlight(0);
                                     textUpadete(Config.vucicMessage, 443, 45);
-                                //     playSound('assets/sounds/vucic/tisina.mp3');
+                                    playSound(soundVucic,mute);
                                     canvasLine();
                                     calcDefeat();
 
@@ -716,7 +747,7 @@ class Main extends Application {
 
                                 if (yourCandidate == 1) {
                                     textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
@@ -724,7 +755,7 @@ class Main extends Application {
                                 } else {
                                     hightlight(1);
                                     textUpadete(Config.dacicMessage, 483, 45);
-                                //     playSound('assets/sounds/dacic/miljacka2.mp3');
+                                    playSound(soundDacic,mute);
                                     canvasLine();
                                     calcDefeat();
                                 }
@@ -736,16 +767,16 @@ class Main extends Application {
 
                                 if (yourCandidate == 2) {
                                     textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(2);
                                     textUpadete(Config.tomaMessage, 432, 45);
-                                //     playSound('assets/sounds/toma/engleski.mp3');
                                     canvasLine();
                                     calcDefeat();
+                                    playSound(soundToma,mute);
                                 }
                                 
                             case 3:
@@ -755,16 +786,16 @@ class Main extends Application {
 
                                 if (yourCandidate == 3) {
                                     textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(3);
                                     textUpadete(Config.tadicMessage, 470, 45);
-                                //     playSound('assets/sounds/tadic/mac.mp3');
                                     canvasLine();
                                     calcDefeat();
+                                    playSound(soundTadic,mute);
                                 }
                                
                             case 4:
@@ -774,16 +805,16 @@ class Main extends Application {
 
                                 if (yourCandidate == 4) {
                                     textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(4);
                                     textUpadete(Config.cedaMessage, 469, 45);
-                                //     playSound('assets/sounds/ceda/gospodjo2.mp3');
                                     canvasLine();
                                     calcDefeat();
+                                    playSound(soundCeda,mute);
                                 }
 
                                
@@ -794,16 +825,16 @@ class Main extends Application {
 
                                 if (yourCandidate == 5) {
                                     textUpadete(Config.winnerMessage, 635, 45, Config.winnerColor);
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin();
                                 } else {
                                     hightlight(5);
                                     textUpadete(Config.canakMessage, 363, 45);
-                                //     playSound('assets/sounds/canak/sat.mp3');
                                     canvasLine();
                                     calcDefeat();
+                                    playSound(soundCanak,mute);
                                 }
                                
                             case 6:
@@ -813,17 +844,16 @@ class Main extends Application {
 
                                 if (yourCandidate == 6) {
                                     textUpadete(Config.winnerMessage, 625, 45, Config.winnerColor);
-                                //     canvasWinerLine();
-                                //     playSound('assets/sounds/win.mp3');
+                                    playSound(soundWin,mute);
                                     canvasWinerLine();
                                     calcWin();
                                 //     onWinAmin()
                                 } else {
                                     hightlight(6);
                                     textUpadete(Config.seseljMessage, 388, 45);
-                                //     playSound('assets/sounds/seselj/olja.mp3');
                                     canvasLine();
                                     calcDefeat();
+                                    playSound(soundSeselj,mute);
                                 }
                               
                          // Browser.window.alert('true');
@@ -847,8 +877,26 @@ class Main extends Application {
 
     function call(){
        startAnimation();
-       // draw();
-       
+
+    }
+    inline function playSound(obj,mute) {
+        obj.mute = mute;
+        obj.play();
+      
+    }
+
+    
+
+    function onLoaded(){
+        soundWin = loader.getAudio("win");
+        soundVucic = loader.getAudio("vucic");
+        soundDacic = loader.getAudio("dacic");
+        soundToma = loader.getAudio("toma");
+        soundTadic = loader.getAudio("tadic");
+        soundCeda = loader.getAudio("ceda");
+        soundCanak = loader.getAudio("canak");
+        soundSeselj = loader.getAudio("seselj");
+
     }
 
     function onButtonDown(){
@@ -864,13 +912,14 @@ class Main extends Application {
     }
 
     function volumeClick() {
-        if (volume) {
-            volumeOnOF.text = 'Uključi zvuk';
-            volume          = false;
-        } else {
+        if (mute) {
             volumeOnOF.text = 'Isključi zvuk';
-            volume          = true;
+            mute          = false;
+        } else {
+            volumeOnOF.text = 'Uključi zvuk';
+            mute          = true;
         }
+        return mute;
     }
 
     function onVucicOver() {
@@ -1101,14 +1150,7 @@ class Main extends Application {
         renderer.render(stage);
     }
 
-     function playSound(x,volume) {
-
-        // var audio       = new Audio(x);
-        // audio.volume    = volume;
-        // audio.play();
-
-    }
-
+   
     function textUpadete(value,x,y,color = "#ff0000" ) {
         message.text        = value;
         message.x           = x;

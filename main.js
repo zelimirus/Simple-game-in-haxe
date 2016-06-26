@@ -5,6 +5,19 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var EReg = function(r,opt) {
+	opt = opt.split("u").join("");
+	this.r = new RegExp(r,opt);
+};
+EReg.__name__ = true;
+EReg.prototype = {
+	match: function(s) {
+		if(this.r.global) this.r.lastIndex = 0;
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+};
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
 HxOverrides.cca = function(s,index) {
@@ -94,6 +107,7 @@ pixi_plugins_app_Application.prototype = {
 };
 var Main = function() {
 	this.test = 0;
+	this.mute = false;
 	this.showWinn = new PIXI.Text("0",{ font : "bold 12px Arial", align : "center", fill : "#A4CC00"});
 	this.congr = new PIXI.Text(custom_Config.winnerMessage2,{ font : "bold 30px Arial", align : "center", fill : "#A4CC00"});
 	this.tvAntenaEnd2 = new PIXI.Graphics();
@@ -148,7 +162,6 @@ var Main = function() {
 	this.finalTileY1 = [];
 	this.gameStatus = 0;
 	this.creditValue = custom_Config.creditValue;
-	this.volume = true;
 	this.selectCandidateWidth = 70;
 	this.selectCandidateHight = 70;
 	this.selectCandidateInitalX = 380;
@@ -180,6 +193,18 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		var volumeStyle_font = "20px Arial";
 		var volumeStyle_fill = "#ff0000";
 		var volumeStyle_align = "center";
+		var baseURL = "assets/sounds/";
+		this.loader = new core_AssetLoader();
+		this.loader.baseUrl = baseURL;
+		this.loader.addAsset("win","win.mp3",false,null);
+		this.loader.addAsset("vucic","tisina.mp3",false,null);
+		this.loader.addAsset("dacic","miljacka2.mp3",false,null);
+		this.loader.addAsset("toma","engleski.mp3",false,null);
+		this.loader.addAsset("tadic","mac.mp3",false,null);
+		this.loader.addAsset("ceda","gospodjo2.mp3",false,null);
+		this.loader.addAsset("canak","sat.mp3",false,null);
+		this.loader.addAsset("seselj","seki.mp3",false,null);
+		this.loader.start($bind(this,this.onLoaded));
 		this.selectVucic.height = this.selectCandidateHight;
 		this.selectVucic.width = this.selectCandidateWidth;
 		this.selectVucic.y = this.selectCandidateInitalY;
@@ -609,11 +634,13 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 0) {
 								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(0);
 								_g.textUpadete(custom_Config.vucicMessage,443,45);
+								_g.playSound(_g.soundVucic,_g.mute);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -623,11 +650,13 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 1) {
 								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
 								_g.hightlight(1);
 								_g.textUpadete(custom_Config.dacicMessage,483,45);
+								_g.playSound(_g.soundDacic,_g.mute);
 								_g.canvasLine();
 								_g.calcDefeat();
 							}
@@ -637,6 +666,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 2) {
 								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
@@ -644,6 +674,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.textUpadete(custom_Config.tomaMessage,432,45);
 								_g.canvasLine();
 								_g.calcDefeat();
+								_g.playSound(_g.soundToma,_g.mute);
 							}
 							break;
 						case 3:
@@ -651,6 +682,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 3) {
 								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
@@ -658,6 +690,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.textUpadete(custom_Config.tadicMessage,470,45);
 								_g.canvasLine();
 								_g.calcDefeat();
+								_g.playSound(_g.soundTadic,_g.mute);
 							}
 							break;
 						case 4:
@@ -665,6 +698,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 4) {
 								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
@@ -672,6 +706,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.textUpadete(custom_Config.cedaMessage,469,45);
 								_g.canvasLine();
 								_g.calcDefeat();
+								_g.playSound(_g.soundCeda,_g.mute);
 							}
 							break;
 						case 5:
@@ -679,6 +714,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 5) {
 								_g.textUpadete(custom_Config.winnerMessage,635,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
@@ -686,6 +722,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.textUpadete(custom_Config.canakMessage,363,45);
 								_g.canvasLine();
 								_g.calcDefeat();
+								_g.playSound(_g.soundCanak,_g.mute);
 							}
 							break;
 						case 6:
@@ -693,6 +730,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 							_g.interactive(true);
 							if(_g.yourCandidate == 6) {
 								_g.textUpadete(custom_Config.winnerMessage,625,45,custom_Config.winnerColor);
+								_g.playSound(_g.soundWin,_g.mute);
 								_g.canvasWinerLine();
 								_g.calcWin();
 							} else {
@@ -700,6 +738,7 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 								_g.textUpadete(custom_Config.seseljMessage,388,45);
 								_g.canvasLine();
 								_g.calcDefeat();
+								_g.playSound(_g.soundSeselj,_g.mute);
 							}
 							break;
 						default:
@@ -716,6 +755,20 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 	,call: function() {
 		this.startAnimation();
 	}
+	,playSound: function(obj,mute) {
+		obj.mute = mute;
+		obj.play();
+	}
+	,onLoaded: function() {
+		this.soundWin = this.loader.getAudio("win");
+		this.soundVucic = this.loader.getAudio("vucic");
+		this.soundDacic = this.loader.getAudio("dacic");
+		this.soundToma = this.loader.getAudio("toma");
+		this.soundTadic = this.loader.getAudio("tadic");
+		this.soundCeda = this.loader.getAudio("ceda");
+		this.soundCanak = this.loader.getAudio("canak");
+		this.soundSeselj = this.loader.getAudio("seselj");
+	}
 	,onButtonDown: function() {
 		this.imgButton.texture = PIXI.Texture.fromImage(custom_Config.imgButtonDown);
 	}
@@ -726,13 +779,14 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 		this.imgButton.texture = PIXI.Texture.fromImage(custom_Config.imgButtonHover);
 	}
 	,volumeClick: function() {
-		if(this.volume) {
-			this.volumeOnOF.text = "Uključi zvuk";
-			this.volume = false;
-		} else {
+		if(this.mute) {
 			this.volumeOnOF.text = "Isključi zvuk";
-			this.volume = true;
+			this.mute = false;
+		} else {
+			this.volumeOnOF.text = "Uključi zvuk";
+			this.mute = true;
 		}
+		return this.mute;
 	}
 	,onVucicOver: function() {
 		this.selectVucic.texture = PIXI.Texture.fromImage(custom_Config.selectVucic);
@@ -947,6 +1001,25 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 	}
 });
 Math.__name__ = true;
+var Reflect = function() { };
+Reflect.__name__ = true;
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		return null;
+	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) a.push(f);
+		}
+	}
+	return a;
+};
 var Std = function() { };
 Std.__name__ = true;
 Std.string = function(s) {
@@ -958,8 +1031,130 @@ Std.parseInt = function(x) {
 	if(isNaN(v)) return null;
 	return v;
 };
+var core_AssetLoader = function() {
+	PIXI.loaders.Loader.call(this);
+	this.count = 0;
+	this.pixelRatio = 1;
+	this._audioAssets = new haxe_ds_StringMap();
+	core_MultipackParser.loader = this;
+	this["use"](core_MultipackParser.parse);
+};
+core_AssetLoader.__name__ = true;
+core_AssetLoader.__super__ = PIXI.loaders.Loader;
+core_AssetLoader.prototype = $extend(PIXI.loaders.Loader.prototype,{
+	start: function(onComplete,onProgress) {
+		this.load(onComplete);
+		if(this.progress != null) this.on("progress",onProgress);
+	}
+	,addAsset: function(id,path,usePixelRatio,onAssetLoaded) {
+		if(usePixelRatio == null) usePixelRatio = true;
+		if(!(Reflect.field(this.resources,id) != null)) {
+			var url = path;
+			if(url != "") {
+				this.add(id,url,{ loadType : this._getLoadtype(path)},onAssetLoaded);
+				this.count++;
+			}
+		}
+	}
+	,getAudio: function(id) {
+		if(this._audioAssets.get(id) == null) {
+			var value = new core_AudioAsset(Reflect.field(this.resources,id).data);
+			this._audioAssets.set(id,value);
+		}
+		return this._audioAssets.get(id);
+	}
+	,_getLoadtype: function(asset) {
+		if(new EReg("(.png|.gif|.svg|.jpg|.jpeg|.bmp)","i").match(asset)) return 2; else if(new EReg("(.mp3|.wav|.ogg|.aac|.m4a|.oga|.webma)","i").match(asset)) return 3; else if(new EReg("(.mp4|.webm|.m3u8)","i").match(asset)) return 4;
+		return 1;
+	}
+});
+var core_AudioAsset = function(src) {
+	this._src = src;
+	this.mute = false;
+	this.set_loop(false);
+};
+core_AudioAsset.__name__ = true;
+core_AudioAsset.prototype = {
+	play: function() {
+		if(!this.mute) this._src.play();
+	}
+	,set_loop: function(val) {
+		this._src.loop = val;
+		return this.loop = val;
+	}
+};
+var core_MultipackParser = function() { };
+core_MultipackParser.__name__ = true;
+core_MultipackParser.parse = function(resource,next) {
+	var data = resource.data;
+	if(data != null && data.multipack) {
+		var textures = data.textures;
+		var imgCount = textures.length;
+		var imgLoadedCount = 0;
+		var resolution = PIXI.utils.getResolutionOfUrl(resource.url);
+		var baseURL = resource.url.split(core_MultipackParser.loader.baseUrl)[1];
+		baseURL = baseURL.substring(0,baseURL.lastIndexOf("/") + 1);
+		var _g = 0;
+		while(_g < textures.length) {
+			var texture = [textures[_g]];
+			++_g;
+			var url = baseURL + texture[0].meta.image;
+			core_MultipackParser.loader.add(texture[0].meta.image,url,{ loadType : 2, crossOrigin : resource.crossOrigin},(function(texture) {
+				return function(image) {
+					var frames = texture[0].frames;
+					var _g1 = 0;
+					var _g2 = Reflect.fields(frames);
+					while(_g1 < _g2.length) {
+						var n = _g2[_g1];
+						++_g1;
+						var frameData = Reflect.field(frames,n);
+						var rect = frameData.frame;
+						if(rect != null) {
+							var size = new PIXI.Rectangle(rect.x,rect.y,rect.w,rect.h);
+							var trim = null;
+							if(frameData.trimmed) {
+								var actualSize = frameData.sourceSize;
+								var realSize = frameData.spriteSourceSize;
+								trim = new PIXI.Rectangle(realSize.x / resolution,realSize.y / resolution,actualSize.w / resolution,actualSize.h / resolution);
+							}
+							size.x /= resolution;
+							size.y /= resolution;
+							size.width /= resolution;
+							size.height /= resolution;
+							PIXI.Texture.addTextureToCache(new PIXI.Texture(image.texture.baseTexture,size,size.clone(),trim),n);
+						}
+					}
+				};
+			})(texture));
+		}
+		next();
+	} else next();
+};
 var custom_Config = function() { };
 custom_Config.__name__ = true;
+var haxe_IMap = function() { };
+haxe_IMap.__name__ = true;
+var haxe_ds_StringMap = function() {
+	this.h = { };
+};
+haxe_ds_StringMap.__name__ = true;
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	set: function(key,value) {
+		if(__map_reserved[key] != null) this.setReserved(key,value); else this.h[key] = value;
+	}
+	,get: function(key) {
+		if(__map_reserved[key] != null) return this.getReserved(key);
+		return this.h[key];
+	}
+	,setReserved: function(key,value) {
+		if(this.rh == null) this.rh = { };
+		this.rh["$" + key] = value;
+	}
+	,getReserved: function(key) {
+		if(this.rh == null) return null; else return this.rh["$" + key];
+	}
+};
 var js_Boot = function() { };
 js_Boot.__name__ = true;
 js_Boot.__string_rec = function(o,s) {
@@ -1033,6 +1228,7 @@ var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
 String.__name__ = true;
 Array.__name__ = true;
+var __map_reserved = {}
 custom_Config.winMultiplication = 5;
 custom_Config.equalMessage = "Pokradene glasačke kutije, izbori se ponavlaju";
 custom_Config.winnerMessage = "Pobeda";
