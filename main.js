@@ -580,13 +580,10 @@ Main.prototype = $extend(pixi_plugins_app_Application.prototype,{
 				this.preChoosedPosition2[i] = this.getRandomInt(0,6);
 				this.preChoosedPosition3[i] = this.getRandomInt(0,6);
 				this.slotSprite1[i].tilePosition.y = -this.preChoosedPosition1[i] * this.tileHEIGHT;
-				this.slotSprite1[i].tint = 16777215;
 				this.finalTileY1[i] = this.nCycly * this.tileHEIGHT * this.tTiles;
 				this.slotSprite2[i].tilePosition.y = -this.preChoosedPosition2[i] * this.tileHEIGHT;
-				this.slotSprite2[i].tint = 16777215;
 				this.finalTileY2[i] = this.nCycly * this.tileHEIGHT * this.tTiles;
 				this.slotSprite3[i].tilePosition.y = -this.preChoosedPosition3[i] * this.tileHEIGHT;
-				this.slotSprite3[i].tint = 16777215;
 				this.finalTileY3[i] = this.nCycly * this.tileHEIGHT * this.tTiles;
 				i++;
 			}
