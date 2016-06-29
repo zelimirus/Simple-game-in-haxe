@@ -580,11 +580,17 @@ class Main extends Application {
                 preChoosedPosition3[i] = getRandomInt(0, 6);
 
                 slotSprite1[i].tilePosition.y = (-preChoosedPosition1[i] * tileHEIGHT);
+                slotSprite1[i].tint             = 16777215;
                 finalTileY1[i] = (nCycly * tileHEIGHT * tTiles);
                 slotSprite2[i].tilePosition.y = (-preChoosedPosition2[i] * tileHEIGHT);
+                 slotSprite2[i].tint             = 16777215;
                 finalTileY2[i] = (nCycly * tileHEIGHT * tTiles);
                 slotSprite3[i].tilePosition.y = (-preChoosedPosition3[i] * tileHEIGHT);
+                slotSprite3[i].tint             = 16777215;
                 finalTileY3[i] = (nCycly * tileHEIGHT * tTiles);
+
+
+  
                 i++;
             }
             gameStatus = gameStateMOVING;
